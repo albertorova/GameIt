@@ -3,17 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.EventFragment"
+    android:gravity="center"
     android:orientation="vertical"
-    android:gravity="center">
+    tools:context=".ui.EventFragment">
 
-
-    <TextView
+    <Button
+        android:id="@+id/btnCrearEvento"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eventos!"/>
+        android:text="Crear evento" />
 
+    <Button
+        android:id="@+id/btnEncontrarEventos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buscar evento" />
 
+    <Button
+        android:id="@+id/btnHistorialEventos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hisotiral de eventos" />
 
 
 </LinearLayout>

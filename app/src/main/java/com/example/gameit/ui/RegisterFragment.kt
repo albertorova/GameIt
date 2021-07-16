@@ -42,9 +42,9 @@ class RegisterFragment : Fragment() {
     private fun initViews() {
         btRegistrar.setOnClickListener {
 
-            val email = TextInputEditText_username.text.toString()
-            val password = TextInputEditText_password.text.toString()
-            val passwordConfirm = TextInputEditText_confirmPassword.text.toString()
+            val email = registerEmail.text.toString()
+            val password = registerPassword.text.toString()
+            val passwordConfirm = registerConfirmPassword.text.toString()
 
             if (password == passwordConfirm && password.length > 5) {
                 registrarFirebase(email, password)

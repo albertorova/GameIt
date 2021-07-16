@@ -10,7 +10,6 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/TextInputLayout_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -18,14 +17,13 @@
             android:hint="Email">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/TextInputEditText_username"
+                    android:id="@+id/registerEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/TextInputLayout_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -34,7 +32,7 @@
             app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/TextInputEditText_password"
+                    android:id="@+id/registerPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword" />
@@ -42,7 +40,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/TextInputLayout_confirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -51,7 +48,7 @@
             app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/TextInputEditText_confirmPassword"
+                    android:id="@+id/registerConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword" />

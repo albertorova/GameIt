@@ -60,11 +60,11 @@ class ProfileFragment : Fragment() {
     private fun initViews() {
         user = Firebase.auth.currentUser
 
-       tvUserName.text = user?.displayName
+        user_profile_name.text = user?.displayName
 
         leerDatosUsuarios()
 
-        btnLogout.setOnClickListener {
+        tvLogOut.setOnClickListener {
 
             Toast.makeText(requireContext(), "Me deslogueo", Toast.LENGTH_SHORT).show()
 

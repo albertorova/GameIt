@@ -42,8 +42,24 @@ class EventFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initGoogle()
+
         initViews()
 
+        btnCrearEvento.setOnClickListener {
+            /*activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.main_container, CreateFragment())?.commit()*/
+        }
+
+        btnEncontrarEventos.setOnClickListener {
+
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.main_container, FindFragment())?.commit()
+        }
+
+        btnHistorialEventos.setOnClickListener {
+           /* activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.main_container, HistoryFragment())?.commit()*/
+        }
     }
 
     private fun initGoogle() {

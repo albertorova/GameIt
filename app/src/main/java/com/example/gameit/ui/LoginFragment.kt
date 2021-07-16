@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.example.gameit.LoginActivity
 import com.example.gameit.MainActivity
 import com.example.gameit.R
+import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -19,11 +20,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.TextInputEditText_password
-import kotlinx.android.synthetic.main.fragment_login.TextInputEditText_username
-import kotlinx.android.synthetic.main.fragment_register.*
+
 
 class LoginFragment : Fragment() {
 // private lateinit var binding: ActivityHomeBinding
@@ -34,6 +34,8 @@ class LoginFragment : Fragment() {
     private val RC_SIGN_IN = 40043034
 
     private val TAG = "LoginActivity"
+
+    private var db = Firebase.firestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,24 +72,36 @@ class LoginFragment : Fragment() {
 
     private fun loginEmailAndPass() {
 
-        val email = TextInputEditText_username.text.toString()
-        val password = TextInputEditText_password.text.toString()
+        val email = loginEmail.text.toString()
+        val password = loginPassword.text.toString()
 
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success")
-                    val user = auth.currentUser
-                    updateUI(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(requireContext(), "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
-                    updateUI(null)
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(requireActivity()) { task ->
+                    if (task.isSuccessful) {
+
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithEmail:success")
+                        val user = auth.currentUser
+                        updateUI(user)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithEmail:failure", task.exception)
+                        Toast.makeText(
+                            requireContext(), "Authentication failed.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        updateUI(null)
+                    }
                 }
-            }
+        } else {
+            Toast.makeText(
+                requireContext(), "Introduce un usuario y contrasena",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+
     }
 
 
@@ -154,12 +168,34 @@ class LoginFragment : Fragment() {
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
 
+            anadirUsuario()
             val intent = Intent()
             intent.setClass(requireActivity(), MainActivity::class.java)
             //finish()
             requireActivity().startActivity(intent)
         }
+
+
+    }
+
+    private fun anadirUsuario() {
+
+        val user1 = Usuario()
+
+        user1.nombre = "Alberto"
+        user1.apellido = "Rodriguez"
+        user1.edad = "33"
+        user1.profesion = "doctor"
+
+        db.collection("users")
+            .add(user1)
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+        }
     }
 
 
-}
+
+
+
+
