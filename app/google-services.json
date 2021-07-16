@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "354768523747",
+    "project_id": "gameit-b933e",
+    "storage_bucket": "gameit-b933e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354768523747:android:9c6a4c23c5998c4a6250d6",
+        "android_client_info": {
+          "package_name": "com.example.gameit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354768523747-35634ec239naa2a2hmfd3sa3g4couq7i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gameit",
+            "certificate_hash": "d319b87c6273fd9ef310cdf69e95b5afdc0d5337"
+          }
+        },
+        {
+          "client_id": "354768523747-0heecsuq47qlvvp8sr97hapudf18fqtb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjer0vD8Po3JQuXH3Lr1synPgtgMz4hNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354768523747-0heecsuq47qlvvp8sr97hapudf18fqtb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
