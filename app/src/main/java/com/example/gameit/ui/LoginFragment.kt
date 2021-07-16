@@ -21,6 +21,9 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.TextInputEditText_password
+import kotlinx.android.synthetic.main.fragment_login.TextInputEditText_username
+import kotlinx.android.synthetic.main.fragment_register.*
 
 class LoginFragment : Fragment() {
 // private lateinit var binding: ActivityHomeBinding
@@ -44,7 +47,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         initGoogle()
         initViews()
 
@@ -56,7 +58,7 @@ class LoginFragment : Fragment() {
         }
 
         btnSingIn.setOnClickListener {
-            login()
+            loginEmailAndPass()
         }
 
         tvCreateAccount.setOnClickListener {
@@ -64,6 +66,28 @@ class LoginFragment : Fragment() {
                 ?.replace(R.id.login_container, RegisterFragment())?.commit()
         }
 
+    }
+
+    private fun loginEmailAndPass() {
+
+        val email = TextInputEditText_username.text.toString()
+        val password = TextInputEditText_password.text.toString()
+
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(requireContext(), "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                    updateUI(null)
+                }
+            }
     }
 
 
