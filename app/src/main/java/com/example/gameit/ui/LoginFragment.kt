@@ -56,7 +56,7 @@ class LoginFragment : Fragment() {
         }
 
         btnSingIn.setOnClickListener {
-            //login()
+            login()
         }
 
         tvCreateAccount.setOnClickListener {

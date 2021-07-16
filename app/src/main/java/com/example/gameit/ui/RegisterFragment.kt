@@ -33,12 +33,15 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         auth = FirebaseAuth.getInstance()
         initViews()
 
     }
+
     private fun initViews() {
         btRegistrar.setOnClickListener {
+
             val email = TextInputEditText_username.text.toString()
             val password = TextInputEditText_password.text.toString()
             val passwordConfirm = TextInputEditText_confirmPassword.text.toString()
@@ -73,7 +76,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun updateUI(user: FirebaseUser) {
-        val intent = Intent(requireContext(), LoginActivity::class.java)
-        startActivity(intent)
+        requireActivity().supportFragmentManager.beginTransaction().replace(R.id.login_container,
+            LoginFragment()).addToBackStack("RedFragment").commit()
     }
 }
