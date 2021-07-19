@@ -23,14 +23,6 @@ import kotlinx.android.synthetic.main.fragment_chat.*
 
 class ChatFragment : Fragment() {
 
-    var demoNames = listOf(
-        "Jamey Bush", "Casandra Red", "Melvin Detrick", "Mirella Jiggetts", "Brook Hetzel",
-        "Eva Mccrystal", "Glennie Hiott", "Alverta Ruggles", "Floria Pedroza", "Marianela Redman",
-        "Colby Bellew", "Marquerite Kite", "Marcelene Rhoads", "Taneka Burgin",
-        "Marci Smits", "Michelle Madero", "Pinkie Josey", "Marlys Nieman", "Ling Reddick"
-    )
-
-    private var mensaje: Mensaje? = null
 
     val listaMensajes = arrayListOf<Mensaje>()
 
@@ -60,16 +52,11 @@ class ChatFragment : Fragment() {
 
         leerMensajes()
 
-        //initAdapter()
-
         crearMensaje()
     }
 
     private fun leerMensajes() {
-
-        val db = Firebase.firestore
         user?.uid?.let {
-
             db.collection("chat")
                 .get()
                 .addOnSuccessListener { documents ->
@@ -84,8 +71,7 @@ class ChatFragment : Fragment() {
                     }
                     initAdapter()
 
-
-                    Log.d(TAG, "$listaMensajes")
+                    //Log.d(TAG, "$listaMensajes")
                 }
 
                 .addOnFailureListener { exception ->
@@ -108,14 +94,11 @@ class ChatFragment : Fragment() {
 
         btnSend.setOnClickListener {
 
-            //val usuario = crearNombre.text.toString()
             val mensaje = chatText.text.toString()
-
 
             val crearUnMensaje = Mensaje()
             crearUnMensaje.usuario = user?.displayName
             crearUnMensaje.mensaje = mensaje
-
 
             user?.uid?.let {
                 db.collection("chat")
@@ -136,12 +119,6 @@ class ChatFragment : Fragment() {
         }
     }
 
- /*   private fun initAdapter() {
-        val mAdapter = ChatAdapter(listaMensajes)
-        chatRecyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        chatRecyclerView.adapter = mAdapter
-    }*/
 
     private fun initGoogle() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -155,7 +132,6 @@ class ChatFragment : Fragment() {
 
     private fun initViews() {
         user = Firebase.auth.currentUser
-
 
     }
 }

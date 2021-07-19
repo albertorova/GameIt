@@ -1,6 +1,5 @@
 package com.example.gameit.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,23 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.gameit.LoginActivity
-import com.example.gameit.MainActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
+import com.example.gameit.adapters.GameAdapter
+import com.example.gameit.models.Game
 import com.example.gameit.models.Partida
-import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_event.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 
 class EventFragment : Fragment() {
+
+    val listaJuegos = arrayListOf<Game>()
 
     private var user: FirebaseUser? = null
 
@@ -50,31 +50,71 @@ class EventFragment : Fragment() {
 
         initViews()
 
+        leerJuegos()
+
         crearPartida()
 
+    }
+
+    private fun leerJuegos() {
+        user?.uid?.let {
+            db.collection("games")
+                .get()
+                .addOnSuccessListener { documents ->
+
+                    for (document in documents) {
+                        Log.d(TAG, "${document.id} => ${document.data}")
+
+                        val a = document.toObject<Game>()
+
+                        listaJuegos.add(a)
+
+                    }
+                    Log.d(TAG, "$listaJuegos")
+
+                    initAdapter()
+
+                }
+
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents.", exception)
+
+                }.addOnCompleteListener {
+                    Log.w(TAG, "Tarea completada")
+                }
+        }
+    }
+
+    private fun initAdapter() {
+        val mAdapter = GameAdapter(listaJuegos)
+        gameRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        gameRecyclerView.adapter = mAdapter
     }
 
     private fun crearPartida() {
 
         btnCrear.setOnClickListener {
 
-            val nombre = crearNombre.text.toString()
+
             val nivel = crearNivel.text.toString()
             val apuesta = crearApuesta.text.toString().toInt()
 
 
             val unaPartida = Partida()
             unaPartida.creador = user?.displayName
-            unaPartida.nombre = nombre
+            unaPartida.nombre = "nombre"
             unaPartida.nivel = nivel
             unaPartida.apuesta = apuesta.toString()
 
             user?.uid?.let {
                 db.collection("partidas")
                     .add(unaPartida)
-                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!")
+                    .addOnSuccessListener {
+                        Log.d(TAG, "DocumentSnapshot successfully written!")
 
-                        Toast.makeText(requireContext(), "Partida creada!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Partida creada!", Toast.LENGTH_SHORT)
+                            .show()
 
                         activity?.supportFragmentManager?.beginTransaction()
                             ?.replace(R.id.main_container, EventFragment())?.commit()
