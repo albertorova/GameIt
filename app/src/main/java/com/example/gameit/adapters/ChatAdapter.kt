@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gameit.R
+import com.example.gameit.models.Mensaje
 
-class ChatAdapter(private val mDataSet: List<String>?) :
+class ChatAdapter(private val mDataSet: ArrayList<Mensaje>) :
     RecyclerView.Adapter<ChatAdapter.MainViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
@@ -15,22 +16,24 @@ class ChatAdapter(private val mDataSet: List<String>?) :
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        val data = mDataSet?.get(position)
-        data?.let {
+        val data = mDataSet[position]
+        data.let {
             holder.bindItems(it)
         }
     }
 
     override fun getItemCount(): Int {
-        return mDataSet?.size ?: 0
+        return mDataSet.size ?: 0
     }
 
     inner class MainViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
-        private val text1 = v.findViewById(R.id.mytexto) as TextView
+        private val v1 = v.findViewById(R.id.chatName) as TextView
+        private val v2 = v.findViewById(R.id.chatMessage) as TextView
 
-        fun bindItems(data: String) {
-            text1.text = data
+        fun bindItems(data: Mensaje) {
+            v1.text = data.usuario
+            v2.text = data.mensaje
         }
     }
 }
