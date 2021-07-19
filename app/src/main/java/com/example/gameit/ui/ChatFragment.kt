@@ -1,6 +1,5 @@
 package com.example.gameit.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,23 +7,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.gameit.LoginActivity
-import com.example.gameit.MainActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
+import com.example.gameit.adapters.ChatAdapter
+import com.example.gameit.adapters.FindAdapter
+import com.example.gameit.models.Mensaje
 import com.example.gameit.models.Partida
-import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_event.*
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_find.*
 
-class EventFragment : Fragment() {
+class ChatFragment : Fragment() {
+
+    var demoNames = listOf(
+        "Jamey Bush","Casandra Red", "Melvin Detrick", "Mirella Jiggetts","Brook Hetzel",
+        "Eva Mccrystal","Glennie Hiott", "Alverta Ruggles", "Floria Pedroza", "Marianela Redman",
+        "Colby Bellew", "Marquerite Kite", "Marcelene Rhoads", "Taneka Burgin",
+        "Marci Smits","Michelle Madero", "Pinkie Josey", "Marlys Nieman","Ling Reddick"
+    )
 
     private var user: FirebaseUser? = null
 
@@ -32,7 +40,7 @@ class EventFragment : Fragment() {
 
     private var db = Firebase.firestore
 
-    private var TAG = "EventFragment"
+    private var TAG = "ChatFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,50 +48,56 @@ class EventFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event, container, false)
+        return inflater.inflate(R.layout.fragment_chat, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initAdapter()
+
         initGoogle()
 
         initViews()
 
-        crearPartida()
-
+        crearMensaje()
     }
 
-    private fun crearPartida() {
+    private fun crearMensaje() {
 
-        btnCrear.setOnClickListener {
+        btnSend.setOnClickListener {
 
-            val nombre = crearNombre.text.toString()
-            val nivel = crearNivel.text.toString()
-            val apuesta = crearApuesta.text.toString().toInt()
+            //val usuario = crearNombre.text.toString()
+            val mensaje = chatText.text.toString()
 
 
-            val unaPartida = Partida()
-            unaPartida.creador = user?.displayName
-            unaPartida.nombre = nombre
-            unaPartida.nivel = nivel
-            unaPartida.apuesta = apuesta.toString()
+            val unMensaje = Mensaje()
+            unMensaje.usuario = user?.displayName
+            unMensaje.mensaje = mensaje
+
 
             user?.uid?.let {
-                db.collection("partidas")
-                    .add(unaPartida)
+                db.collection("chat")
+                    .add(unMensaje)
                     .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!")
 
-                        Toast.makeText(requireContext(), "Partida creada!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Mensaje enviado", Toast.LENGTH_SHORT).show()
 
                         activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.main_container, EventFragment())?.commit()
+                            ?.replace(R.id.main_container, ChatFragment())?.commit()
 
                     }
                     .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
             }
 
         }
+    }
+
+    private fun initAdapter() {
+        val mAdapter = ChatAdapter(demoNames)
+        chatRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        chatRecyclerView.adapter = mAdapter
     }
 
     private fun initGoogle() {

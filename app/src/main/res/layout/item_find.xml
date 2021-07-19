@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
-        android:layout_width="160dp"
-        android:layout_margin="10dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?selectableItemBackground"
@@ -17,11 +17,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/bliu"
             android:orientation="vertical">
 
 
             <ImageView
-                android:id="@+id/ivgame"
+                android:id="@+id/findImage"
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
                 android:scaleType="centerCrop"
@@ -30,34 +31,43 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:layout_margin="10dp">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvname"
+                    android:id="@+id/findName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre Juego"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="#FF5900" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvplayers"
+                    android:id="@+id/findCreator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Num Jugadores " />
+                    android:text="Creador"
+                    android:textColor="#FF6600"
+                    android:textSize="18sp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/findLevel"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:text="Nivel"
+                    android:textColor="@color/teal_200" />
 
+                <TextView
+                    android:id="@+id/findApuesta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apuesta"
+                    android:textColor="@color/purple_200" />
 
-                </LinearLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 

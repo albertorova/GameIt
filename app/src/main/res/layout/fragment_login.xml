@@ -4,54 +4,87 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".ui.LoginFragment">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:src="@drawable/ic_launcher_foreground" />
-
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:src="@drawable/ic_launcher_background" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
         android:text="Login with your account"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="Email"
+        android:textColor="@color/white" />
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="Email">
+        android:layout_marginRight="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/bliu"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="Password"
+        android:textColor="@color/white" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="Password"
         app:endIconMode="password_toggle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:background="@color/bliu"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,16 +93,21 @@
         android:id="@+id/btnSingIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="30dp"
-        android:text="Sing up" />
+        android:layout_marginRight="50dp"
+        android:backgroundTint="#9A8F2E"
+        android:text="LOGIN"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="Or connect with Google" />
+        android:text="Or connect with Google"
+
+        android:textColor="@color/white" />
 
 
     <Button
@@ -83,21 +121,22 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="40dp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crear cuenta  " />
+            android:text="REGISTRATE  "
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/tvCreateAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:text="aquí"
-            android:textColor="@color/teal_200" />
+            android:text="AQUÍ"
+            android:textColor="#FFE600" />
 
 
     </LinearLayout>

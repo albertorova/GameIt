@@ -168,7 +168,6 @@ class LoginFragment : Fragment() {
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
 
-            anadirUsuario()
             val intent = Intent()
             intent.setClass(requireActivity(), MainActivity::class.java)
             //finish()
@@ -178,21 +177,7 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun anadirUsuario() {
-
-        val user1 = Usuario()
-
-        user1.nombre = "Alberto"
-        user1.apellido = "Rodriguez"
-        user1.edad = "33"
-        user1.profesion = "doctor"
-
-        db.collection("users")
-            .add(user1)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-        }
-    }
+}
 
 
 

@@ -3,27 +3,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.EventFragment">
+    tools:context=".ui.EventFragment"
+    android:background="@color/blue">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Creacion de partida"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"/>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecciona el juego"
+        android:textColor="@color/white"
+        android:layout_margin="20dp"/>
+
+    <EditText
+        android:id="@+id/crearNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecciona el nivel"
+        android:textColor="@color/white"
+        android:layout_margin="20dp"/>
+
+    <EditText
+        android:id="@+id/crearNivel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cuanto quieres apostar"
+        android:textColor="@color/white"
+        android:layout_margin="20dp"/>
+
+    <EditText
+        android:id="@+id/crearApuesta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/white"/>
+
 
     <Button
-        android:id="@+id/btnCrearEvento"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnCrear"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Crear evento" />
-
-    <Button
-        android:id="@+id/btnEncontrarEventos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Buscar evento" />
-
-    <Button
-        android:id="@+id/btnHistorialEventos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hisotiral de eventos" />
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:backgroundTint="@color/yellow"
+        android:text="Crear partida"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
 
 </LinearLayout>
