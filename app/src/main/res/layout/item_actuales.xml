@@ -2,12 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
-
-        android:id="@+id/findCard"
+        android:id="@+id/card"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -24,7 +22,7 @@
 
 
             <ImageView
-                android:id="@+id/findImage"
+                android:id="@+id/actualesImage"
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
                 android:scaleType="centerCrop"
@@ -38,7 +36,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/findName"
+                    android:id="@+id/actualesName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre Juego"
@@ -47,7 +45,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/findCreator"
+                    android:id="@+id/actualesCreator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Creador"
@@ -55,21 +53,21 @@
                     android:textSize="18sp"/>
 
                 <TextView
-                    android:id="@+id/findLevel"
+                    android:id="@+id/actualesLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nivel"
                     android:textColor="@color/teal_200" />
 
                 <TextView
-                    android:id="@+id/findApuesta"
+                    android:id="@+id/actualesApuesta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Apuesta"
                     android:textColor="@color/purple_200" />
 
                 <TextView
-                    android:id="@+id/findCodigo"
+                    android:id="@+id/actualesCodigo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Codigo"

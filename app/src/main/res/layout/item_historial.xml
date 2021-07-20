@@ -2,18 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
-
-        android:id="@+id/findCard"
+        android:id="@+id/card"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?selectableItemBackground"
         app:cardElevation="10dp">
 
         <LinearLayout
@@ -22,13 +17,43 @@
             android:background="@color/bliu"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/findImage"
-                android:layout_width="match_parent"
-                android:layout_height="194dp"
-                android:scaleType="centerCrop"
-                android:src="@android:drawable/btn_star_big_on" />
+                <ImageView
+                    android:id="@+id/historialImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="194dp"
+                    android:alpha="0.4"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/btn_star_big_on" />
+
+                <TextView
+                    android:id="@+id/victory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:text="VICTORY"
+                    android:textColor="@color/green"
+                    android:textSize="35sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/defeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="DEFEAT"
+                    android:textColor="@color/red"
+                    android:textSize="35sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,7 +63,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/findName"
+                    android:id="@+id/historialName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre Juego"
@@ -47,34 +72,26 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/findCreator"
+                    android:id="@+id/historialCreator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Creador"
                     android:textColor="#FF6600"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/findLevel"
+                    android:id="@+id/historialLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nivel"
                     android:textColor="@color/teal_200" />
 
                 <TextView
-                    android:id="@+id/findApuesta"
+                    android:id="@+id/historialApuesta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Apuesta"
                     android:textColor="@color/purple_200" />
-
-                <TextView
-                    android:id="@+id/findCodigo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Codigo"
-                    android:textSize="20sp"
-                    android:textColor="@color/green" />
 
 
             </LinearLayout>

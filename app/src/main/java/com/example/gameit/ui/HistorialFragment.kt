@@ -2,15 +2,14 @@ package com.example.gameit.ui
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
-import com.example.gameit.adapters.ChatAdapter
-import com.example.gameit.models.Mensaje
+import com.example.gameit.adapters.HistorialAdapter
+import com.example.gameit.models.Partida
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -19,14 +18,11 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_chat.*
-import java.text.DateFormat
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_historial.*
 
-class ChatFragment : Fragment() {
+class HistorialFragment : Fragment() {
 
-
-    val listaMensajes = arrayListOf<Mensaje>()
+    val listaPartidasTerminadas = arrayListOf<Partida>()
 
     private var user: FirebaseUser? = null
 
@@ -34,7 +30,7 @@ class ChatFragment : Fragment() {
 
     private var db = Firebase.firestore
 
-    private var TAG = "ChatFragment"
+    private var TAG = "HistorialFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +38,7 @@ class ChatFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return inflater.inflate(R.layout.fragment_historial, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,28 +48,29 @@ class ChatFragment : Fragment() {
 
         initViews()
 
-        leerMensajes()
+        leerPartidasTerminadas()
 
-        crearMensaje()
     }
 
-    private fun leerMensajes() {
+    private fun leerPartidasTerminadas() {
         user?.uid?.let {
-            db.collection("chat")
+            db.collection("partidas")
+                .whereEqualTo("finished", true)
                 .get()
                 .addOnSuccessListener { documents ->
 
                     for (document in documents) {
                         Log.d(TAG, "${document.id} => ${document.data}")
 
-                        val a = document.toObject<Mensaje>()
+                        val a = document.toObject<Partida>()
 
-                        listaMensajes.add(a)
+                        listaPartidasTerminadas.add(a)
 
                     }
+                    Log.d(TAG, "$listaPartidasTerminadas")
+
                     initAdapter()
 
-                    //Log.d(TAG, "$listaMensajes")
                 }
 
                 .addOnFailureListener { exception ->
@@ -86,47 +83,10 @@ class ChatFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        val mAdapter = ChatAdapter(listaMensajes)
-        chatRecyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        chatRecyclerView.adapter = mAdapter
+        val mAdapter = HistorialAdapter(listaPartidasTerminadas)
+        historialRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        historialRecyclerView.adapter = mAdapter
     }
-
-    private fun crearMensaje() {
-
-        btnSend.setOnClickListener {
-
-            val mensaje = chatText.text.toString()
-
-            val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-
-            val crearUnMensaje = Mensaje()
-
-            crearUnMensaje.usuario = user?.displayName
-            crearUnMensaje.mensaje = mensaje
-            crearUnMensaje.fecha = currentDateTimeString
-
-
-
-            user?.uid?.let {
-                db.collection("chat")
-                    .add(crearUnMensaje)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "DocumentSnapshot successfully written!")
-
-                        Toast.makeText(requireContext(), "Mensaje enviado", Toast.LENGTH_SHORT)
-                            .show()
-
-                        activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.main_container, ChatFragment())?.commit()
-
-                    }
-                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-            }
-
-        }
-    }
-
 
     private fun initGoogle() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -141,7 +101,6 @@ class ChatFragment : Fragment() {
     private fun initViews() {
         user = Firebase.auth.currentUser
 
+
     }
 }
-
-

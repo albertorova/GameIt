@@ -1,24 +1,21 @@
 package com.example.gameit.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gameit.R
 import com.example.gameit.models.Partida
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_historial.view.*
 
-class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Partida) -> Unit) :
-    RecyclerView.Adapter<FindAdapter.MainViewHolder>() {
-
-    private var TAG = "FindAdapter"
-
+class HistorialAdapter(private val mDataSet: ArrayList<Partida>) :
+    RecyclerView.Adapter<HistorialAdapter.MainViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_find, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_historial, parent, false)
         return MainViewHolder(v)
     }
 
@@ -26,13 +23,6 @@ class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Pa
         val data = mDataSet[position]
         data.let {
             holder.bindItems(it)
-
-            holder.findCard.setOnClickListener {
-                clickAction(data)
-
-                Log.v(TAG,"CLick en la partida del find")
-
-            }
         }
     }
 
@@ -42,15 +32,13 @@ class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Pa
 
     inner class MainViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
-        val findCard = v.findViewById(R.id.findCard) as CardView
-
-        private val v1 = v.findViewById(R.id.findImage) as ImageView
-        private val v2 = v.findViewById(R.id.findName) as TextView
-        private val v3 = v.findViewById(R.id.findCreator) as TextView
-        private val v4 = v.findViewById(R.id.findLevel) as TextView
-        private val v5 = v.findViewById(R.id.findApuesta) as TextView
-        private val v6 = v.findViewById(R.id.findCodigo) as TextView
-
+        private val v1 = v.findViewById(R.id.historialImage) as ImageView
+        private val v2 = v.findViewById(R.id.historialName) as TextView
+        private val v3 = v.findViewById(R.id.historialCreator) as TextView
+        private val v4 = v.findViewById(R.id.historialLevel) as TextView
+        private val v5 = v.findViewById(R.id.historialApuesta) as TextView
+        private val v6 = v.findViewById(R.id.victory) as TextView
+        private val v7 = v.findViewById(R.id.defeat) as TextView
 
         fun bindItems(data: Partida) {
             Picasso.get().load("https://images-na.ssl-images-amazon.com/images/I/51rkz8wallL.jpg")
@@ -59,7 +47,7 @@ class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Pa
             v3.text = data.creador
             v4.text = data.nivel
 
-          /*  when (data.nivel) {
+            /*  when (data.nivel) {
                 "Pro" -> {
                     v4.setTextColor(1)
                 }
@@ -72,7 +60,12 @@ class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Pa
             }*/
 
             v5.text = "${data.apuesta} monedas"
-            v6.text = data.codigo
+
+            if (data.isVictory == true){
+                v6.victory.isVisible = true
+            } else {
+                v7.defeat.isVisible = true
+            }
 
         }
     }

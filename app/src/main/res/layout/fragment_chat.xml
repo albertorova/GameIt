@@ -46,7 +46,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="enviar"
-            android:layout_margin="20dp"/>
+            android:backgroundTint="@color/yellow"
+            android:layout_margin="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

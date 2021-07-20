@@ -8,6 +8,9 @@ class Partida(): Serializable {
     var nombre: String? = null
     var nivel: String? = null
     var apuesta: String? = null
-    var finalizada: Boolean? = false
+    var codigo: String? = null
+    var isAccepted: Boolean = false
+    var isFinished: Boolean? = false
+    var isVictory: Boolean? = false
 
 }

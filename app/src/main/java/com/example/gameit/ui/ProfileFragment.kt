@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
 
-    //private var usuario: Usuario? = null
+    private var usuario: Usuario? = null
 
     private var user: FirebaseUser? = null
 
@@ -85,16 +85,15 @@ class ProfileFragment : Fragment() {
     private fun initViews() {
         user = Firebase.auth.currentUser
 
+        leerDatosUsuarios()
+
         modificarUsuario()
 
         user_profile_name.text = user?.displayName
 
         Firebase.auth.currentUser?.photoUrl?.let {
-           Picasso.get().load(it).into(user_profile_photo)
-       }
-
-
-        leerDatosUsuarios()
+            Picasso.get().load(it).into(user_profile_photo)
+        }
 
 
     }
@@ -131,7 +130,13 @@ class ProfileFragment : Fragment() {
         user?.uid?.let {
             db.collection("users").document(it)
                 .get()
-                .addOnSuccessListener { document ->
+                .addOnSuccessListener { result ->
+
+                    Log.d(TAG, "$result")
+
+                    usuario = result.toObject(Usuario::class.java)
+
+                    initDatosUsuario()
                 }
                 .addOnFailureListener { exception ->
                     Log.w(TAG, "Error getting documents.", exception)
@@ -142,6 +147,12 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun initDatosUsuario() {
+        etNombre.setText(usuario?.nombre)
+        etApellido.setText(usuario?.apellido)
+        etEdad.setText(usuario?.edad.toString())
+        etPais.setText(usuario?.pais)
 
 
+    }
 }

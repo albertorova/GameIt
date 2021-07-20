@@ -13,17 +13,20 @@
 
     <item
         android:id="@+id/action_events"
-        android:icon="@drawable/chat"
-        android:title="Partida" />
+        android:icon="@drawable/add"
+        android:title=""
+
+        />
 
     <item
         android:id="@+id/action_dashboard"
         android:icon="@drawable/chat"
-        android:title="Mis partidas" />
+        android:title="Mis partidas"
+        />
 
     <item
         android:id="@+id/action_profile"
         android:icon="@drawable/chat"
         android:title="Profile" />
-    
+
 </menu>

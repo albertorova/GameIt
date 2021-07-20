@@ -8,8 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="blue">#192D50</color>
-    <color name="bliu">#173D80</color>
-    <color name="yellow">#9A8F2E</color>
+    <color name="blue">#131D30</color>
+    <color name="bliu">#1E3B70</color>
+    <color name="yellow">#FFE400</color>
+
+    <color name="green">#61FF00</color>
+    <color name="red">#FF0000</color>
+
 
 </resources>

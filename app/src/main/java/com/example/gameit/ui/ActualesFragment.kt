@@ -1,18 +1,19 @@
 package com.example.gameit.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.system.Os.accept
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gameit.MainActivity
 import com.example.gameit.R
-import com.example.gameit.adapters.ChatAdapter
-import com.example.gameit.adapters.FindAdapter
+import com.example.gameit.adapters.ActualesAdapter
 import com.example.gameit.models.Partida
-import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -22,13 +23,11 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_chat.*
-import kotlinx.android.synthetic.main.fragment_find.*
+import kotlinx.android.synthetic.main.fragment_actuales.*
 
+class ActualesFragment : Fragment() {
 
-class FindFragment : Fragment() {
-
-    val listaPartidas = arrayListOf<Partida>()
+    val listaPartidasAceptadas = arrayListOf<Partida>()
 
     private var user: FirebaseUser? = null
 
@@ -36,7 +35,7 @@ class FindFragment : Fragment() {
 
     private var db = Firebase.firestore
 
-    private var TAG = "FindFragment"
+    private var TAG = "ActualesFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +43,7 @@ class FindFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_find, container, false)
+        return inflater.inflate(R.layout.fragment_actuales, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,13 +53,14 @@ class FindFragment : Fragment() {
 
         initViews()
 
-        leerPartidas()
+        leerPartidasAceptadas()
 
     }
 
-    private fun leerPartidas() {
+    private fun leerPartidasAceptadas() {
         user?.uid?.let {
             db.collection("partidas")
+                .whereEqualTo("accepted", true)
                 .get()
                 .addOnSuccessListener { documents ->
 
@@ -69,10 +69,10 @@ class FindFragment : Fragment() {
 
                         val a = document.toObject<Partida>()
 
-                        listaPartidas.add(a)
+                        listaPartidasAceptadas.add(a)
 
                     }
-                    Log.d(TAG, "$listaPartidas")
+                    Log.d(TAG, "$listaPartidasAceptadas")
 
                     initAdapter()
 
@@ -88,41 +88,38 @@ class FindFragment : Fragment() {
     }
 
     private fun initAdapter() {
+        val mAdapter = ActualesAdapter(listaPartidasAceptadas) {
 
-        val mAdapter = FindAdapter(listaPartidas) {
-
-            Log.w(TAG, "Click en la partida")
+            Log.d(TAG, "Partida actual Clickada!")
 
             initDialog()
 
         }
-
-        findRecyclerView.layoutManager =
+        actualesRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        findRecyclerView.adapter = mAdapter
-
+        actualesRecyclerView.adapter = mAdapter
     }
 
     private fun initDialog() {
-
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Desafio")
-            .setMessage("Aceptas el desafio??")
+            .setTitle("Resultado")
+            .setMessage("Quien ha ganado")
 
-            .setNegativeButton("Cancelar") { dialog, which ->
-                    //Cerrar dialog
+            .setNegativeButton("Derrota") { dialog, which ->
+                modificarPartidaDerrota()
             }
-            .setPositiveButton("Aceptar") { dialog, which ->
-                aceptarPartida()
+            .setPositiveButton("Victoria") { dialog, which ->
+                modificarPartidaVictoria()
             }
             .show()
     }
 
-    private fun aceptarPartida() {
+    private fun modificarPartidaVictoria() {
 
         val a = Partida()
 
-        a.isAccepted = true
+        a.isFinished = true
+        a.isVictory = true
 
         user?.uid?.let {
             db.collection("partidas").document(it)
@@ -132,13 +129,38 @@ class FindFragment : Fragment() {
 
                     Toast.makeText(
                         requireContext(),
-                        "Desafio aceptado!",
+                        "Partida ganada",
                         Toast.LENGTH_SHORT
                     )
                         .show()
 
                     activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.main_container, FindFragment())?.commit()
+                        ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
+                }
+                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+        }
+    }
+
+    private fun modificarPartidaDerrota() {
+        val a = Partida()
+
+        a.isFinished = true
+
+        user?.uid?.let {
+            db.collection("partidas").document(it)
+                .set(a)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully written!")
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Partida perdida",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
         }

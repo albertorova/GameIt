@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment() {
 
@@ -36,6 +37,19 @@ class DashboardFragment : Fragment() {
         initGoogle()
 
         initViews()
+
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
+
+        tvHistorial.setOnClickListener {
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.parent_fragment_container, HistorialFragment())?.commit()
+        }
+
+        tvActuales.setOnClickListener {
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
+        }
 
     }
 

@@ -1,5 +1,16 @@
 <resources>
+
     <string name="app_name">GameIt</string>
+
     <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="level_array">
+        <item>Noob</item>
+        <item>Average</item>
+        <item>Pro</item>
+
+    </string-array>
+
 </resources>

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
+        android:id="@+id/eventCard"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

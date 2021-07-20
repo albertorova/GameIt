@@ -2,11 +2,14 @@ package com.example.gameit.ui
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
 import com.example.gameit.adapters.GameAdapter
@@ -22,7 +25,12 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_event.*
 
+
 class EventFragment : Fragment() {
+
+    var tempNombre: String = ""
+
+    var tempNivel: String = ""
 
     val listaJuegos = arrayListOf<Game>()
 
@@ -34,10 +42,12 @@ class EventFragment : Fragment() {
 
     private var TAG = "EventFragment"
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_event, container, false)
@@ -52,7 +62,44 @@ class EventFragment : Fragment() {
 
         leerJuegos()
 
+        initSpinner()
+
         crearPartida()
+
+    }
+
+    private fun initSpinner() {
+
+        val spinner = requireView().findViewById<View>(R.id.level_spinner) as Spinner
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.level_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    pos: Int,
+                    id: Long
+                ) {
+                    // An item was selected. You can retrieve the selected item using
+                    // parent.getItemAtPosition(pos)
+                    tempNivel = parent.getItemAtPosition(pos) as String
+
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    // Another interface callback
+                }
+            }
+        }
 
     }
 
@@ -86,7 +133,13 @@ class EventFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        val mAdapter = GameAdapter(listaJuegos)
+        val mAdapter = GameAdapter(listaJuegos) {
+
+            tempNombre = it.nombre.toString()
+
+            //  gamePortada.alpha = 0.5F
+
+        }
         gameRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         gameRecyclerView.adapter = mAdapter
@@ -97,15 +150,21 @@ class EventFragment : Fragment() {
         btnCrear.setOnClickListener {
 
 
-            val nivel = crearNivel.text.toString()
-            val apuesta = crearApuesta.text.toString().toInt()
+            // val nivel = crearNivel.text.toString()
+            // val apuesta = crearApuesta.text.toString().toInt()
 
 
             val unaPartida = Partida()
             unaPartida.creador = user?.displayName
-            unaPartida.nombre = "nombre"
-            unaPartida.nivel = nivel
-            unaPartida.apuesta = apuesta.toString()
+            unaPartida.nombre = tempNombre
+            //unaPartida.nivel = nivel
+            unaPartida.nivel = tempNivel
+            //unaPartida.apuesta = apuesta.toString()
+            unaPartida.apuesta = "40"
+            unaPartida.codigo = "12345"
+            unaPartida.isAccepted
+            unaPartida.isFinished
+            unaPartida.isVictory
 
             user?.uid?.let {
                 db.collection("partidas")
@@ -113,7 +172,11 @@ class EventFragment : Fragment() {
                     .addOnSuccessListener {
                         Log.d(TAG, "DocumentSnapshot successfully written!")
 
-                        Toast.makeText(requireContext(), "Partida creada!", Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            requireContext(),
+                            "Partida creada!",
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
 
                         activity?.supportFragmentManager?.beginTransaction()
