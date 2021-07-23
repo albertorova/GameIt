@@ -50,29 +50,38 @@
                     android:layout_height="wrap_content"
                     android:text="Creador"
                     android:textColor="#FF6600"
-                    android:textSize="18sp"/>
+                    android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/actualesLevel"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nivel"
-                    android:textColor="@color/teal_200" />
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/actualesApuesta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Apuesta"
-                    android:textColor="@color/purple_200" />
+                    <TextView
+                        android:id="@+id/actualesLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nivel"
+                        android:textColor="@color/teal_200" />
+
+                    <TextView
+                        android:id="@+id/actualesApuesta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:text="Apuesta"
+                        android:textColor="@color/purple_200" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/actualesCodigo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Codigo"
-                    android:textSize="20sp"
-                    android:textColor="@color/green" />
+                    android:text="#"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
 
             </LinearLayout>

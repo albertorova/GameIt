@@ -2,17 +2,13 @@ package com.example.gameit.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
 import com.example.gameit.adapters.GameAdapter
+import com.example.gameit.databinding.FragmentEventBinding
 import com.example.gameit.models.Game
 import com.example.gameit.models.Partida
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,7 +19,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_event.*
 
 
 class EventFragment : Fragment() {
@@ -42,6 +37,10 @@ class EventFragment : Fragment() {
 
     private var TAG = "EventFragment"
 
+    private var _binding: FragmentEventBinding? = null
+
+    private val b get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +48,14 @@ class EventFragment : Fragment() {
     ): View? {
 
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event, container, false)
+        _binding = FragmentEventBinding.inflate(inflater, container, false)
+
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         initGoogle()
 
@@ -64,9 +65,54 @@ class EventFragment : Fragment() {
 
         initSpinner()
 
+        incrementarApuesta()
+
         crearPartida()
 
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.settings -> {
+
+                //Ir a settings
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_container, SettingsFragment())?.commit()
+
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun incrementarApuesta() {
+
+
+        b.btnSum.setOnClickListener {
+            val a = b.crearApuesta.text.toString().toInt()
+            val c = a + 1
+            b.crearApuesta.text = c.toString()
+
+        }
+
+        b.btnRes.setOnClickListener {
+            val a = b.crearApuesta.text.toString().toInt()
+            if (a == 0){
+                Log.v(TAG,"no se puede bajar de 0")
+
+            } else {
+                val c = a - 1
+                b.crearApuesta.text = c.toString()
+            }
+        }
+    }
+
 
     private fun initSpinner() {
 
@@ -140,53 +186,50 @@ class EventFragment : Fragment() {
             //  gamePortada.alpha = 0.5F
 
         }
-        gameRecyclerView.layoutManager =
+        b.gameRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        gameRecyclerView.adapter = mAdapter
+        b.gameRecyclerView.adapter = mAdapter
     }
 
     private fun crearPartida() {
 
-        btnCrear.setOnClickListener {
-
-
-            // val nivel = crearNivel.text.toString()
-            // val apuesta = crearApuesta.text.toString().toInt()
+        b.btnCrear.setOnClickListener {
 
 
             val unaPartida = Partida()
+
             unaPartida.creador = user?.displayName
             unaPartida.nombre = tempNombre
-            //unaPartida.nivel = nivel
             unaPartida.nivel = tempNivel
-            //unaPartida.apuesta = apuesta.toString()
-            unaPartida.apuesta = "40"
-            unaPartida.codigo = "12345"
+
+            unaPartida.apuesta = b.crearApuesta.text.toString().toInt()
+
+            val rnds2 = (100000..999999).random()
+            unaPartida.codigo = rnds2.toString()
+
             unaPartida.isAccepted
             unaPartida.isFinished
             unaPartida.isVictory
 
-            user?.uid?.let {
-                db.collection("partidas")
-                    .add(unaPartida)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "DocumentSnapshot successfully written!")
+            db.collection("partidas")
+                .add(unaPartida)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully written!")
 
-                        Toast.makeText(
-                            requireContext(),
-                            "Partida creada!",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Partida creada!",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
 
-                        activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.main_container, EventFragment())?.commit()
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.main_container, EventFragment())?.commit()
 
-                    }
-                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-            }
-
+                }
+                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
         }
+
     }
 
     private fun initGoogle() {
@@ -202,6 +245,10 @@ class EventFragment : Fragment() {
     private fun initViews() {
         user = Firebase.auth.currentUser
 
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

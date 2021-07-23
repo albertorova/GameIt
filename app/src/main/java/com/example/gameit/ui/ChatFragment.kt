@@ -2,14 +2,13 @@ package com.example.gameit.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
 import com.example.gameit.adapters.ChatAdapter
+import com.example.gameit.databinding.FragmentChatBinding
 import com.example.gameit.models.Mensaje
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -19,7 +18,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_chat.*
 import java.text.DateFormat
 import java.util.*
 
@@ -36,17 +34,23 @@ class ChatFragment : Fragment() {
 
     private var TAG = "ChatFragment"
 
+    private var _binding: FragmentChatBinding? = null
+
+    private val b get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        _binding = FragmentChatBinding.inflate(inflater, container, false)
+
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         initGoogle()
 
@@ -57,10 +61,32 @@ class ChatFragment : Fragment() {
         crearMensaje()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.settings -> {
+
+                //Ir a settings
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_container, SettingsFragment())?.commit()
+
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun leerMensajes() {
         user?.uid?.let {
             db.collection("chat")
+                .orderBy("fecha")
                 .get()
+
                 .addOnSuccessListener { documents ->
 
                     for (document in documents) {
@@ -87,16 +113,16 @@ class ChatFragment : Fragment() {
 
     private fun initAdapter() {
         val mAdapter = ChatAdapter(listaMensajes)
-        chatRecyclerView.layoutManager =
+        b.chatRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        chatRecyclerView.adapter = mAdapter
+        b.chatRecyclerView.adapter = mAdapter
     }
 
     private fun crearMensaje() {
 
-        btnSend.setOnClickListener {
+        b.btnSend.setOnClickListener {
 
-            val mensaje = chatText.text.toString()
+            val mensaje = b.chatText.text.toString()
 
             val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
 
@@ -104,9 +130,7 @@ class ChatFragment : Fragment() {
 
             crearUnMensaje.usuario = user?.displayName
             crearUnMensaje.mensaje = mensaje
-            crearUnMensaje.fecha = currentDateTimeString
-
-
+            crearUnMensaje.fecha = Date()
 
             user?.uid?.let {
                 db.collection("chat")
@@ -141,6 +165,11 @@ class ChatFragment : Fragment() {
     private fun initViews() {
         user = Firebase.auth.currentUser
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 

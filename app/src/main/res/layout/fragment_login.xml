@@ -10,8 +10,10 @@
     tools:context=".ui.LoginFragment">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:id="@+id/loginImage"
+        android:layout_width="100dp"
+        android:scaleType="centerCrop"
+        android:layout_height="100dp"
         android:src="@drawable/ic_launcher_background" />
 
     <TextView
@@ -60,7 +62,8 @@
             android:textColorHint="@color/white"
             android:shadowColor="@color/white"
             android:textColorHighlight="@color/white"
-            android:textColorLink="@color/white"/>
+            android:textColorLink="@color/white"
+            android:textAlignment="center"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,7 +82,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        app:endIconMode="password_toggle">
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/white"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginPassword"
@@ -88,7 +93,8 @@
             android:background="@color/bliu"
             android:inputType="textPassword"
             android:textColor="@color/white"
-            android:textColorHint="@color/white"/>
+            android:textColorHint="@color/white"
+            android:textAlignment="center"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,10 +103,10 @@
         android:id="@+id/btnSingIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
+        android:layout_marginLeft="100dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="50dp"
-        android:backgroundTint="#9A8F2E"
+        android:layout_marginRight="100dp"
+        android:backgroundTint="@color/yellow"
         android:text="LOGIN"
         android:textColor="@color/black"
         android:textStyle="bold" />
@@ -114,12 +120,14 @@
         android:textColor="@color/white" />
 
 
-    <Button
+    <ImageButton
         android:id="@+id/btnGoogle"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="15dp"
-        android:text="G" />
+        android:text="G"
+        android:src="@drawable/common_google_signin_btn_icon_dark"
+        />
 
 
     <LinearLayout

@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_find"
-        android:icon="@drawable/chat"
+        android:icon="@drawable/fire"
         android:title="Competir" />
 
     <item
@@ -12,21 +12,17 @@
         android:title="Chat" />
 
     <item
-        android:id="@+id/action_events"
-        android:icon="@drawable/add"
-        android:title=""
+        android:title="" />
 
-        />
 
     <item
         android:id="@+id/action_dashboard"
-        android:icon="@drawable/chat"
-        android:title="Mis partidas"
-        />
+        android:icon="@drawable/list"
+        android:title="Mis partidas" />
 
     <item
         android:id="@+id/action_profile"
-        android:icon="@drawable/chat"
-        android:title="Profile" />
+        android:icon="@drawable/child"
+        android:title="Perfil" />
 
 </menu>

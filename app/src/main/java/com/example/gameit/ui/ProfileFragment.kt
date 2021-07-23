@@ -1,13 +1,12 @@
 package com.example.gameit.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.gameit.LoginActivity
 import com.example.gameit.R
+import com.example.gameit.databinding.FragmentProfileBinding
 import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -17,8 +16,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_event.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 class ProfileFragment : Fragment() {
@@ -33,23 +30,35 @@ class ProfileFragment : Fragment() {
 
     private var db = Firebase.firestore
 
+    private var _binding: FragmentProfileBinding? = null
+
+    private val b get() = _binding!!
+
+    var nick: String = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
+    ): View {
 
-    ): View? {
+        nick = requireArguments().getString("nick").toString()
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        Log.v(TAG,"$nick")
+
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setHasOptionsMenu(true)
 
         initGoogle()
+
         initViews()
 
+        modificarUsuario()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -87,42 +96,52 @@ class ProfileFragment : Fragment() {
 
         leerDatosUsuarios()
 
-        modificarUsuario()
-
-        user_profile_name.text = user?.displayName
+        b.userProfileName.text = user?.displayName
 
         Firebase.auth.currentUser?.photoUrl?.let {
-            Picasso.get().load(it).into(user_profile_photo)
+            Picasso.get().load(it).into(b.userProfilePhoto)
         }
-
 
     }
 
     private fun modificarUsuario() {
 
-        btnModificar.setOnClickListener {
+        b.btnModificar.setOnClickListener {
 
-            val nombre = etNombre.text.toString()
-            val apellido = etApellido.text.toString()
-            val edad = etEdad.text.toString().toInt()
-            val pais = etPais.text.toString()
+            val nombre = b.etNombre.text.toString()
+            val apellido1 = b.etApellido1.text.toString()
+            val apellido2 = b.etApellido2.text.toString()
+            val edad = b.etEdad.text.toString().toInt()
+            val region = b.etRegion.text.toString()
+            val pais = b.etPais.text.toString()
 
             val user1 = Usuario()
             user1.nombre = nombre
-            user1.apellido = apellido
-            user1.edad = edad.toString()
+            user1.apellido1 = apellido1
+            user1.apellido2 = apellido2
+            user1.edad = edad
+            user1.region = region
             user1.pais = pais
+            user1.joyas = 10
 
             user?.uid?.let {
                 db.collection("users").document(it)
                     .set(user1)
-                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                    .addOnSuccessListener {
+                        Log.d(TAG, "DocumentSnapshot successfully written!")
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Datos modificados satisfactoriamente",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    }
                     .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
             }
         }
 
     }
-
 
     private fun leerDatosUsuarios() {
         // Add a new document with a generated ID
@@ -148,11 +167,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initDatosUsuario() {
-        etNombre.setText(usuario?.nombre)
-        etApellido.setText(usuario?.apellido)
-        etEdad.setText(usuario?.edad.toString())
-        etPais.setText(usuario?.pais)
-
-
+        b.etNombre.setText(usuario?.nombre)
+        b.etApellido1.setText(usuario?.apellido1)
+        b.etApellido2.setText(usuario?.apellido2)
+        b.etEdad.setText(usuario?.edad.toString())
+        b.etRegion.setText(usuario?.region)
+        b.etPais.setText(usuario?.pais)
     }
 }

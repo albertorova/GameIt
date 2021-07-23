@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
 import com.example.gameit.adapters.HistorialAdapter
+import com.example.gameit.databinding.FragmentHistorialBinding
 import com.example.gameit.models.Partida
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,7 +19,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_historial.*
 
 class HistorialFragment : Fragment() {
 
@@ -32,13 +32,18 @@ class HistorialFragment : Fragment() {
 
     private var TAG = "HistorialFragment"
 
+    private var _binding: FragmentHistorialBinding? = null
+
+    private val b get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_historial, container, false)
+        _binding = FragmentHistorialBinding.inflate(inflater, container, false)
+
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,9 +88,12 @@ class HistorialFragment : Fragment() {
     }
 
     private fun initAdapter() {
+
         val mAdapter = HistorialAdapter(listaPartidasTerminadas)
-        historialRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        historialRecyclerView.adapter = mAdapter
+        b.historialRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        b.historialRecyclerView.adapter = mAdapter
+
     }
 
     private fun initGoogle() {
@@ -102,5 +110,10 @@ class HistorialFragment : Fragment() {
         user = Firebase.auth.currentUser
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

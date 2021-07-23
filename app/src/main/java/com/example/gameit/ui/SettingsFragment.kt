@@ -9,14 +9,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.gameit.LoginActivity
 import com.example.gameit.R
+import com.example.gameit.databinding.FragmentSettingsBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_settings.*
+
 
 
 class SettingsFragment : Fragment() {
@@ -27,13 +27,18 @@ class SettingsFragment : Fragment() {
 
     private var TAG = "SettingsFragment"
 
+    private var _binding: FragmentSettingsBinding? = null
+
+    private val b get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +63,7 @@ class SettingsFragment : Fragment() {
     private fun initViews() {
         user = Firebase.auth.currentUser
 
-        tvLogOut.setOnClickListener {
+        b.tvLogOut.setOnClickListener {
 
             Toast.makeText(requireContext(), "Me deslogueo", Toast.LENGTH_SHORT).show()
 
@@ -80,6 +85,11 @@ class SettingsFragment : Fragment() {
         }
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 

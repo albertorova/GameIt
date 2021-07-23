@@ -1,55 +1,82 @@
 package com.example.gameit.ui
 
+
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
-import com.example.gameit.LoginActivity
 import com.example.gameit.MainActivity
 import com.example.gameit.R
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.example.gameit.databinding.FragmentRegisterBinding
+import com.example.gameit.models.Usuario
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.fragment_register.*
 
 class RegisterFragment : Fragment() {
+
+    private var usuario: Usuario? = null
 
     private lateinit var auth: FirebaseAuth
 
     private var TAG = "RegisterFragment"
 
+    private var _binding: FragmentRegisterBinding? = null
+
+    private val b get() = _binding!!
+
+    var nick: String? = ""
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
-        initViews()
+
+        registrarse()
+
+        volver()
 
     }
 
-    private fun initViews() {
-        btRegistrar.setOnClickListener {
+    private fun volver() {
 
-            val email = registerEmail.text.toString()
-            val password = registerPassword.text.toString()
-            val passwordConfirm = registerConfirmPassword.text.toString()
+        b.btVolver.setOnClickListener {
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.login_container, LoginFragment())?.commit()
+        }
+    }
+
+    private fun registrarse() {
+
+        b.btRegistrar.setOnClickListener {
+
+            val email = b.registerEmail.text.toString()
+            val password = b.registerPassword.text.toString()
+            val passwordConfirm = b.registerConfirmPassword.text.toString()
+
 
             if (password == passwordConfirm && password.length > 5) {
                 registrarFirebase(email, password)
             } else {
-                Toast.makeText(requireContext(), "Error, password no coinciden", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Error, password no coinciden", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -61,8 +88,12 @@ class RegisterFragment : Fragment() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
+
                     if (user != null) {
-                        updateUI(user)
+
+                        nickDialog(user)
+
+
                     }
                 } else {
                     // If sign in fails, display a message to the user.
@@ -75,8 +106,59 @@ class RegisterFragment : Fragment() {
             }
     }
 
+    private fun nickDialog(user: FirebaseUser) {
+
+        val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(context)
+        builder.setTitle("Introduce tu NickName")
+
+        // Set up the input
+        val input = EditText(context)
+
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.hint = "Crea tu NickName"
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+
+
+
+            if (input.text.isEmpty()) {
+
+                Toast.makeText(
+                    requireContext(), "Introduce un Nick!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            } else {
+
+                nick = input.text.toString()
+
+                updateUI(user)
+            }
+
+        })
+
+        builder.setNegativeButton(
+            "Cancel",
+            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+
+        builder.show()
+
+    }
+
+
     private fun updateUI(user: FirebaseUser) {
-        requireActivity().supportFragmentManager.beginTransaction().replace(R.id.login_container,
-            LoginFragment()).addToBackStack("RedFragment").commit()
+
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.putExtra("nick",nick)
+        startActivity(intent)
+
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

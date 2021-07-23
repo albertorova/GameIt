@@ -12,8 +12,14 @@
     <color name="bliu">#1E3B70</color>
     <color name="yellow">#FFE400</color>
 
+    <color name="orange">#FF5900</color>
+
+
+    <color name="blueblue">#00FFC4</color>
     <color name="green">#61FF00</color>
     <color name="red">#FF0000</color>
+
+
 
 
 </resources>

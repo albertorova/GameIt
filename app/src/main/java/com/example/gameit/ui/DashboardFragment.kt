@@ -1,18 +1,18 @@
 package com.example.gameit.ui
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.example.gameit.R
+import com.example.gameit.databinding.FragmentDashboardBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_dashboard.*
+
 
 class DashboardFragment : Fragment() {
 
@@ -22,35 +22,94 @@ class DashboardFragment : Fragment() {
 
     private var TAG = "DashboardFragment"
 
+    private var _binding: FragmentDashboardBinding? = null
+
+    private val b get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         initGoogle()
 
         initViews()
 
+        colorOnActuales()
+
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
 
-        tvHistorial.setOnClickListener {
+        b.tvHistorial.setOnClickListener {
+
+            colorOffActuales()
+
+            colorOnHistorial()
+
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.parent_fragment_container, HistorialFragment())?.commit()
+
         }
 
-        tvActuales.setOnClickListener {
+        b.tvActuales.setOnClickListener {
+
+            colorOnActuales()
+
+            colorOffHistorial()
+
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.settings -> {
+
+                //Ir a settings
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_container, SettingsFragment())?.commit()
+
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun colorOnActuales() {
+        b.tvActuales.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+        b.view1.setBackgroundResource(R.color.yellow)
+    }
+
+    private fun colorOffActuales() {
+        b.tvActuales.setTextColor(ContextCompat.getColor(requireContext(), R.color.bliu))
+        b.view1.setBackgroundResource(R.color.bliu)
+    }
+
+    private fun colorOnHistorial() {
+        b.tvHistorial.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+        b.view2.setBackgroundResource(R.color.yellow)
+    }
+
+    private fun colorOffHistorial() {
+        b.tvHistorial.setTextColor(ContextCompat.getColor(requireContext(), R.color.bliu))
+        b.view2.setBackgroundResource(R.color.bliu)
     }
 
     private fun initGoogle() {
@@ -67,5 +126,10 @@ class DashboardFragment : Fragment() {
         user = Firebase.auth.currentUser
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -8,10 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.gameit.LoginActivity
 import com.example.gameit.MainActivity
 import com.example.gameit.R
-import com.example.gameit.models.Usuario
+import com.example.gameit.databinding.FragmentLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -22,11 +21,10 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_login.*
+import com.squareup.picasso.Picasso
 
 
 class LoginFragment : Fragment() {
-// private lateinit var binding: ActivityHomeBinding
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
@@ -37,33 +35,43 @@ class LoginFragment : Fragment() {
 
     private var db = Firebase.firestore
 
+    private var _binding: FragmentLoginBinding? = null
+
+    private val b get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Picasso.get()
+            .load("https://yt3.ggpht.com/ytc/AKedOLRyqsQbpKNjJBgwlvqyaAL9mLZUqPanLVsXUaXOUw=s900-c-k-c0x00ffffff-no-rj")
+            .into(b.loginImage)
+
         initGoogle()
+
         initViews()
 
     }
 
     private fun initViews() {
-        btnGoogle.setOnClickListener {
+        b.btnGoogle.setOnClickListener {
             signIn()
         }
 
-        btnSingIn.setOnClickListener {
+        b.btnSingIn.setOnClickListener {
             loginEmailAndPass()
         }
 
-        tvCreateAccount.setOnClickListener {
+        b.tvCreateAccount.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.login_container, RegisterFragment())?.commit()
         }
@@ -72,14 +80,14 @@ class LoginFragment : Fragment() {
 
     private fun loginEmailAndPass() {
 
-        val email = loginEmail.text.toString()
-        val password = loginPassword.text.toString()
+        val email = b.loginEmail.text.toString()
+        val password = b.loginPassword.text.toString()
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
+
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
-
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success")
                         val user = auth.currentUser
@@ -87,23 +95,17 @@ class LoginFragment : Fragment() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
+
                         Toast.makeText(
                             requireContext(), "Authentication failed.",
                             Toast.LENGTH_SHORT
                         ).show()
+
                         updateUI(null)
                     }
                 }
-        } else {
-            Toast.makeText(
-                requireContext(), "Introduce un usuario y contrasena",
-                Toast.LENGTH_SHORT
-            ).show()
         }
-
-
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -122,7 +124,6 @@ class LoginFragment : Fragment() {
 
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
     }
-
 
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
@@ -157,6 +158,7 @@ class LoginFragment : Fragment() {
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
                     updateUI(user)
+
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -167,14 +169,16 @@ class LoginFragment : Fragment() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
-
             val intent = Intent()
             intent.setClass(requireActivity(), MainActivity::class.java)
-            //finish()
             requireActivity().startActivity(intent)
         }
 
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

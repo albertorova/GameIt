@@ -1,8 +1,6 @@
 package com.example.gameit.ui
 
-import android.content.Intent
 import android.os.Bundle
-import android.system.Os.accept
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gameit.MainActivity
 import com.example.gameit.R
 import com.example.gameit.adapters.ActualesAdapter
+import com.example.gameit.databinding.FragmentActualesBinding
 import com.example.gameit.models.Partida
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -23,7 +21,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_actuales.*
 
 class ActualesFragment : Fragment() {
 
@@ -37,13 +34,18 @@ class ActualesFragment : Fragment() {
 
     private var TAG = "ActualesFragment"
 
+    private var _binding: FragmentActualesBinding? = null
+
+    private val b get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_actuales, container, false)
+        _binding = FragmentActualesBinding.inflate(inflater, container, false)
+
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,111 +60,112 @@ class ActualesFragment : Fragment() {
     }
 
     private fun leerPartidasAceptadas() {
-        user?.uid?.let {
-            db.collection("partidas")
-                .whereEqualTo("accepted", true)
-                .get()
-                .addOnSuccessListener { documents ->
 
-                    for (document in documents) {
-                        Log.d(TAG, "${document.id} => ${document.data}")
+        db.collection("partidas")
+            .whereEqualTo("accepted", true)
+            .whereEqualTo("finished", false)
+            .get()
+            .addOnSuccessListener { documents ->
 
-                        val a = document.toObject<Partida>()
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
 
-                        listaPartidasAceptadas.add(a)
+                    val a = document.toObject<Partida>()
 
-                    }
-                    Log.d(TAG, "$listaPartidasAceptadas")
+                    a.id = document.id
 
-                    initAdapter()
+                    listaPartidasAceptadas.add(a)
 
                 }
+                Log.d(TAG, "$listaPartidasAceptadas")
 
-                .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error getting documents.", exception)
+                initAdapter()
 
-                }.addOnCompleteListener {
-                    Log.w(TAG, "Tarea completada")
-                }
-        }
+            }
+
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+
+            }.addOnCompleteListener {
+                Log.w(TAG, "Tarea completada")
+            }
     }
+
 
     private fun initAdapter() {
         val mAdapter = ActualesAdapter(listaPartidasAceptadas) {
 
             Log.d(TAG, "Partida actual Clickada!")
 
-            initDialog()
+            initDialog(it)
 
         }
-        actualesRecyclerView.layoutManager =
+        b.actualesRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        actualesRecyclerView.adapter = mAdapter
+        b.actualesRecyclerView.adapter = mAdapter
     }
 
-    private fun initDialog() {
+    private fun initDialog(partida: Partida) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Resultado")
             .setMessage("Quien ha ganado")
 
             .setNegativeButton("Derrota") { dialog, which ->
-                modificarPartidaDerrota()
+
+                modificarPartidaDerrota(partida)
             }
             .setPositiveButton("Victoria") { dialog, which ->
-                modificarPartidaVictoria()
+
+                modificarPartidaVictoria(partida)
             }
             .show()
     }
 
-    private fun modificarPartidaVictoria() {
+    private fun modificarPartidaVictoria(partida: Partida) {
 
-        val a = Partida()
-
-        a.isFinished = true
-        a.isVictory = true
-
-        user?.uid?.let {
+        partida.id?.let {
             db.collection("partidas").document(it)
-                .set(a)
+                .update("finished", true, "victory", true)
                 .addOnSuccessListener {
-                    Log.d(TAG, "DocumentSnapshot successfully written!")
+                    Log.d(TAG, "DocumentSnapshot successfully updated!")
 
                     Toast.makeText(
                         requireContext(),
-                        "Partida ganada",
+                        "Has ganado",
                         Toast.LENGTH_SHORT
                     )
                         .show()
 
                     activity?.supportFragmentManager?.beginTransaction()
                         ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
+
                 }
-                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+
         }
     }
 
-    private fun modificarPartidaDerrota() {
-        val a = Partida()
+    private fun modificarPartidaDerrota(partida: Partida) {
 
-        a.isFinished = true
-
-        user?.uid?.let {
+        partida.id?.let {
             db.collection("partidas").document(it)
-                .set(a)
+                .update("finished", true)
                 .addOnSuccessListener {
-                    Log.d(TAG, "DocumentSnapshot successfully written!")
+                    Log.d(TAG, "DocumentSnapshot successfully updated!")
 
                     Toast.makeText(
                         requireContext(),
-                        "Partida perdida",
+                        "Has perdido",
                         Toast.LENGTH_SHORT
                     )
                         .show()
 
                     activity?.supportFragmentManager?.beginTransaction()
                         ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
+
                 }
-                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+
         }
     }
 
@@ -180,6 +183,11 @@ class ActualesFragment : Fragment() {
         user = Firebase.auth.currentUser
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 
