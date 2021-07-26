@@ -2,10 +2,8 @@ package com.example.gameit
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Html
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.example.gameit.databinding.ActivityMainBinding
 import com.example.gameit.models.Usuario
@@ -17,7 +15,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.squareup.picasso.Picasso
 
 
 class MainActivity : AppCompatActivity() {
@@ -111,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAppBar() {
 
-        var a = usuario?.joyas.toString()
+        val a = usuario?.joyas.toString()
         title = "GameIt                     100 \uD83E\uDE99  $a \uD83D\uDC8E"
 
     }
@@ -128,4 +125,11 @@ class MainActivity : AppCompatActivity() {
     fun goToFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.main_container, fragment).commit()
     }
+
+    fun actualizarBalanceJoyas(balanceJoyas: Int?) {
+
+        title = "GameIt                     100 \uD83E\uDE99  $balanceJoyas \uD83D\uDC8E"
+
+    }
+
 }

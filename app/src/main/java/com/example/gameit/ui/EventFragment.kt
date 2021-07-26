@@ -240,7 +240,6 @@ class EventFragment : Fragment() {
 
             tempPortada = it.portada.toString()
 
-            //  gamePortada.alpha = 0.5F
 
         }
         b.gameRecyclerView.layoutManager = GridLayoutManager(context, 2)

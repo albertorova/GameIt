@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 
 class SplashActivity : AppCompatActivity() {
 
-    var t: Long = 1000
+    var t: Long = 10000
 
     private lateinit var b: ActivitySplashBinding
 
@@ -115,7 +115,7 @@ class SplashActivity : AppCompatActivity() {
 
         h1.postDelayed({
 
-            b.tv1.text = "Cargando los cargamentos"
+            b.tv1.text = "Inicializando vistas"
 
         }, 2200)
 
@@ -123,7 +123,7 @@ class SplashActivity : AppCompatActivity() {
 
         h1.postDelayed({
 
-            b.tv1.text = "Inicializando lo inicializable"
+            b.tv1.text = "Cargando las bases de datos"
 
         }, 4000)
 

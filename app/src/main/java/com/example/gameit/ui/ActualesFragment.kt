@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gameit.MainActivity
 import com.example.gameit.R
 import com.example.gameit.adapters.ActualesAdapter
 import com.example.gameit.databinding.FragmentActualesBinding
@@ -20,13 +21,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 class ActualesFragment : Fragment() {
+
+    private var usuario: Usuario? = null
+
+    private var joyasDelUsuario: Int? = null
+
+    private var balanceJoyas: Int? = null
 
     val listaPartidasAceptadas = arrayListOf<Partida>()
 
@@ -109,13 +114,15 @@ class ActualesFragment : Fragment() {
 
 
     private fun initAdapter() {
-        val mAdapter = ActualesAdapter(listaPartidasAceptadas) {
+
+        val mAdapter = ActualesAdapter(listaPartidasAceptadas, activity) {
 
             Log.d(TAG, "Partida actual Clickada!")
 
             initDialog(it)
 
         }
+
         b.actualesRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         b.actualesRecyclerView.adapter = mAdapter
@@ -132,12 +139,47 @@ class ActualesFragment : Fragment() {
             }
             .setPositiveButton("Victoria") { dialog, which ->
 
+                comprobarSaldo(partida)
+
                 modificarPartidaVictoria(partida)
             }
 
             .show()
             .window?.setBackgroundDrawableResource(R.color.orangy)
 
+    }
+
+    private fun comprobarSaldo(partida: Partida) {
+
+        val joyasSumadas = partida.apuesta
+
+        user = Firebase.auth.currentUser
+
+        user?.uid?.let {
+            db.collection("users").document(it)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    Log.d(TAG, "$result")
+
+                    usuario = result.toObject(Usuario::class.java)
+
+                    joyasDelUsuario = usuario?.joyas
+
+                    val j = joyasSumadas?.times(2)
+
+                    balanceJoyas = joyasDelUsuario!! + j!!
+
+                    Log.v(TAG, "$usuario")
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents.", exception)
+
+                }.addOnCompleteListener {
+                    Log.w(TAG, "Tarea completada")
+                }
+        }
     }
 
     private fun modificarPartidaVictoria(partida: Partida) {
@@ -148,7 +190,7 @@ class ActualesFragment : Fragment() {
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully updated!")
 
-                    addPremioUsuario(partida)
+                    addPremioUsuario()
 
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
@@ -156,31 +198,32 @@ class ActualesFragment : Fragment() {
         }
     }
 
-    private fun addPremioUsuario(partida: Partida) {
-
-        val a = partida.apuesta?.toLong()?.times(2)
+    private fun addPremioUsuario() {
 
         user = Firebase.auth.currentUser
 
         user?.uid?.let {
             db.collection("users").document(it)
-                .update("joyas", a?.let { it1 -> FieldValue.increment(it1) })
+                .update("joyas", balanceJoyas)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully updated!")
 
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
-
                     Toast.makeText(
                         requireContext(),
-                        "Has ganado",
+                        "Desafio aceptado!",
                         Toast.LENGTH_SHORT
                     )
                         .show()
+
+                    (activity as? MainActivity)?.actualizarBalanceJoyas(balanceJoyas)
+
+                    listaPartidasAceptadas.clear()
+
+                    leerPartidasAceptadas()
+
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
         }
-
     }
 
 

@@ -26,7 +26,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
                 android:scaleType="centerCrop"
-                android:src="@android:drawable/btn_star_big_on" />
+                android:src="@android:drawable/btn_star_big_on"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

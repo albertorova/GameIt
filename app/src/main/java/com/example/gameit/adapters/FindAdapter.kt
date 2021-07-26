@@ -8,16 +8,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gameit.R
 import com.example.gameit.databinding.ItemFindBinding
 import com.example.gameit.models.Partida
 import com.squareup.picasso.Picasso
 
-class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Partida) -> Unit) :
+class FindAdapter(
+    private val mDataSet: ArrayList<Partida>,
+    val activity: FragmentActivity?,
+    var clickAction: (Partida) -> Unit
+) :
     RecyclerView.Adapter<FindAdapter.MainViewHolder>() {
 
     var context: Context? = null
@@ -45,9 +52,17 @@ class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Pa
 
                 Log.v(TAG, "CLick laaaaaargo")
 
-                /*val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip: ClipData = ClipData.newPlainText("simple text", data.apuesta.toString())
-                clipboard.setPrimaryClip(clip)*/
+                Toast.makeText(
+                    activity,
+                    "Codigo copiado al portapapeles",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+
+                val clipboard =
+                    context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip: ClipData = ClipData.newPlainText("simple text", data.codigo.toString())
+                clipboard.setPrimaryClip(clip)
 
                 false
             })

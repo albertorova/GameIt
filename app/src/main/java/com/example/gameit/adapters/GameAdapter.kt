@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso
 class GameAdapter(private val mDataSet: ArrayList<Game>, var clickAction: (Game) -> Unit) :
     RecyclerView.Adapter<GameAdapter.MainViewHolder>() {
 
+    private var posicion: String = ""
     private var TAG = "GameAdapter"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
@@ -26,28 +27,39 @@ class GameAdapter(private val mDataSet: ArrayList<Game>, var clickAction: (Game)
         data.let {
             holder.bindItems(it)
 
-            holder.eventCard.setOnClickListener {
+            holder.b.eventCard.setOnClickListener {
                 clickAction(data)
 
                 Log.v(TAG, "CLick en la partida del find")
 
+                posicion = data.nombre.toString()
+
+                notifyDataSetChanged()
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return mDataSet.size ?: 0
+        return mDataSet.size
     }
 
     inner class MainViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         val b = ItemGameBinding.bind(v)
 
-        val eventCard = v.findViewById(R.id.eventCard) as CardView
-
         fun bindItems(data: Game) {
+
             Picasso.get().load(data.portada).into(b.gamePortada)
             b.gameNombre.text = data.nombre
+
+            if (data.nombre == posicion) {
+
+                b.eventCard.alpha = 0.5F
+
+            } else {
+
+                b.eventCard.alpha = 1F
+            }
         }
     }
 }

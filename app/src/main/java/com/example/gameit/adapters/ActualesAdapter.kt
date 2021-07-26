@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gameit.R
 import com.example.gameit.databinding.ItemActualesBinding
@@ -24,6 +25,7 @@ import com.squareup.picasso.Picasso
 class ActualesAdapter(
 
     private val mDataSet: ArrayList<Partida>,
+    val activity: FragmentActivity?,
     var clickAction: (Partida) -> Unit
 ) :
     RecyclerView.Adapter<ActualesAdapter.MainViewHolder>() {
@@ -42,20 +44,28 @@ class ActualesAdapter(
         data.let {
             holder.bindItems(it)
 
-            holder.actualesCard.setOnClickListener {
+            holder.b.actualesCard.setOnClickListener {
                 clickAction(data)
 
                 Log.v(TAG, "CLick en la partida actual")
 
             }
 
-            holder.actualesCard.setOnLongClickListener(View.OnLongClickListener { // obtenemos el texto del textView3
+            holder.b.actualesCard.setOnLongClickListener(View.OnLongClickListener { // obtenemos el texto del textView3
 
                 Log.v(TAG, "CLick laaaaaargo")
 
-                /*val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip: ClipData = ClipData.newPlainText("simple text", data.apuesta.toString())
-                clipboard.setPrimaryClip(clip)*/
+                Toast.makeText(
+                    activity,
+                    "Codigo copiado al portapapeles",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+
+                val clipboard =
+                    context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip: ClipData = ClipData.newPlainText("simple text", data.codigo.toString())
+                clipboard.setPrimaryClip(clip)
 
                 false
             })
@@ -74,8 +84,6 @@ class ActualesAdapter(
     inner class MainViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         val b = ItemActualesBinding.bind(v)
-
-        val actualesCard = v.findViewById(R.id.card) as CardView
 
         fun bindItems(data: Partida) {
             Picasso.get().load(data.portada)

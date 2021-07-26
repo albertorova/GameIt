@@ -1,17 +1,14 @@
 package com.example.gameit.ui
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.View.OnLongClickListener
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gameit.MainActivity
 import com.example.gameit.R
 import com.example.gameit.adapters.FindAdapter
 import com.example.gameit.databinding.FragmentFindBinding
@@ -138,7 +135,7 @@ class FindFragment : Fragment() {
 
     private fun initAdapter() {
 
-        val mAdapter = FindAdapter(listaPartidas) {
+        val mAdapter = FindAdapter(listaPartidas,activity) {
 
             Log.w(TAG, "Click en la partida")
 
@@ -253,6 +250,8 @@ class FindFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+
+                    (activity as? MainActivity)?.actualizarBalanceJoyas(balanceJoyas)
 
                     listaPartidas.clear()
 
