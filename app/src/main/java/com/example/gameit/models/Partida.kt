@@ -2,8 +2,9 @@ package com.example.gameit.models
 
 import java.io.Serializable
 
-class Partida(): Serializable {
+class Partida() : Serializable {
 
+    var portada:String? = null
     var creador: String? = null
     var nombre: String? = null
     var nivel: String? = null

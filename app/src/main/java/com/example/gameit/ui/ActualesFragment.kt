@@ -7,17 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
 import com.example.gameit.adapters.ActualesAdapter
 import com.example.gameit.databinding.FragmentActualesBinding
 import com.example.gameit.models.Partida
+import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -41,7 +45,7 @@ class ActualesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentActualesBinding.inflate(inflater, container, false)
 
@@ -79,7 +83,19 @@ class ActualesFragment : Fragment() {
                 }
                 Log.d(TAG, "$listaPartidasAceptadas")
 
-                initAdapter()
+                if (listaPartidasAceptadas.isEmpty()) {
+
+                    b.image1.isVisible = true
+
+                    initAdapter()
+
+                } else {
+
+                    b.image1.isVisible = false
+
+                    initAdapter()
+
+                }
 
             }
 
@@ -107,8 +123,8 @@ class ActualesFragment : Fragment() {
 
     private fun initDialog(partida: Partida) {
         MaterialAlertDialogBuilder(requireContext())
+
             .setTitle("Resultado")
-            .setMessage("Quien ha ganado")
 
             .setNegativeButton("Derrota") { dialog, which ->
 
@@ -118,7 +134,10 @@ class ActualesFragment : Fragment() {
 
                 modificarPartidaVictoria(partida)
             }
+
             .show()
+            .window?.setBackgroundDrawableResource(R.color.orangy)
+
     }
 
     private fun modificarPartidaVictoria(partida: Partida) {
@@ -129,21 +148,41 @@ class ActualesFragment : Fragment() {
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully updated!")
 
-                    Toast.makeText(
-                        requireContext(),
-                        "Has ganado",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
+                    addPremioUsuario(partida)
 
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
 
         }
     }
+
+    private fun addPremioUsuario(partida: Partida) {
+
+        val a = partida.apuesta?.toLong()?.times(2)
+
+        user = Firebase.auth.currentUser
+
+        user?.uid?.let {
+            db.collection("users").document(it)
+                .update("joyas", a?.let { it1 -> FieldValue.increment(it1) })
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully updated!")
+
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.parent_fragment_container, ActualesFragment())?.commit()
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Has ganado",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+        }
+
+    }
+
 
     private fun modificarPartidaDerrota(partida: Partida) {
 
@@ -169,6 +208,7 @@ class ActualesFragment : Fragment() {
         }
     }
 
+
     private fun initGoogle() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -181,7 +221,6 @@ class ActualesFragment : Fragment() {
 
     private fun initViews() {
         user = Firebase.auth.currentUser
-
 
     }
 

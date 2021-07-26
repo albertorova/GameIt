@@ -8,5 +8,6 @@ class Mensaje(): Serializable {
     var usuario: String? = null
     var mensaje: String? = null
     var fecha: Date? = null
+    var juego: String? = null
 
 }

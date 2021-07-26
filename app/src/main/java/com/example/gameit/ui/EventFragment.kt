@@ -5,12 +5,13 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.gameit.R
 import com.example.gameit.adapters.GameAdapter
 import com.example.gameit.databinding.FragmentEventBinding
 import com.example.gameit.models.Game
 import com.example.gameit.models.Partida
+import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -19,9 +20,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 
 class EventFragment : Fragment() {
+
+    private var usuario: Usuario? = null
+
+    var tempPortada: String = ""
 
     var tempNombre: String = ""
 
@@ -61,6 +67,10 @@ class EventFragment : Fragment() {
 
         initViews()
 
+        initCodigo()
+
+        leerDatosUsuario()
+
         leerJuegos()
 
         initSpinner()
@@ -69,6 +79,50 @@ class EventFragment : Fragment() {
 
         crearPartida()
 
+    }
+
+    private fun initCodigo() {
+
+        val rnd = getRandomString(10)
+
+        b.crearCodigo.setText(rnd)
+
+        b.crearCodigo.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) b.crearCodigo.setText("")
+        }
+    }
+
+    private fun getRandomString(sizeOfRandomString: Int): String {
+
+        val characters = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+
+        val random = Random()
+        val sb = StringBuilder(sizeOfRandomString)
+        for (i in 0 until sizeOfRandomString)
+            sb.append(characters[random.nextInt(characters.length)])
+        return sb.toString()
+    }
+
+    private fun leerDatosUsuario() {
+        // Add a new document with a generated ID
+        val db = Firebase.firestore
+        user?.uid?.let {
+            db.collection("users").document(it)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    Log.d(TAG, "$result")
+
+                    usuario = result.toObject(Usuario::class.java)
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents.", exception)
+
+                }.addOnCompleteListener {
+                    Log.w(TAG, "Tarea completada")
+                }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -103,8 +157,8 @@ class EventFragment : Fragment() {
 
         b.btnRes.setOnClickListener {
             val a = b.crearApuesta.text.toString().toInt()
-            if (a == 0){
-                Log.v(TAG,"no se puede bajar de 0")
+            if (a == 0) {
+                Log.v(TAG, "no se puede bajar de 0")
 
             } else {
                 val c = a - 1
@@ -116,18 +170,19 @@ class EventFragment : Fragment() {
 
     private fun initSpinner() {
 
-        val spinner = requireView().findViewById<View>(R.id.level_spinner) as Spinner
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.level_array,
-            android.R.layout.simple_spinner_item
+            R.layout.spinner_layout
+
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_layout)
             // Apply the adapter to the spinner
-            spinner.adapter = adapter
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            b.levelSpinner.adapter = adapter
+            b.levelSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
                 override fun onItemSelected(
                     parent: AdapterView<*>,
@@ -183,11 +238,12 @@ class EventFragment : Fragment() {
 
             tempNombre = it.nombre.toString()
 
+            tempPortada = it.portada.toString()
+
             //  gamePortada.alpha = 0.5F
 
         }
-        b.gameRecyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        b.gameRecyclerView.layoutManager = GridLayoutManager(context, 2)
         b.gameRecyclerView.adapter = mAdapter
     }
 
@@ -198,14 +254,14 @@ class EventFragment : Fragment() {
 
             val unaPartida = Partida()
 
-            unaPartida.creador = user?.displayName
+            unaPartida.portada = tempPortada
+            unaPartida.creador = usuario?.nickname
             unaPartida.nombre = tempNombre
             unaPartida.nivel = tempNivel
 
             unaPartida.apuesta = b.crearApuesta.text.toString().toInt()
 
-            val rnds2 = (100000..999999).random()
-            unaPartida.codigo = rnds2.toString()
+            unaPartida.codigo = b.crearCodigo.text.toString()
 
             unaPartida.isAccepted
             unaPartida.isFinished

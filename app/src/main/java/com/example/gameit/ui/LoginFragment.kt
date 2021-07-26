@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.example.gameit.MainActivity
 import com.example.gameit.R
 import com.example.gameit.databinding.FragmentLoginBinding
+import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -30,6 +31,8 @@ class LoginFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
 
     private val RC_SIGN_IN = 40043034
+
+    private var user: FirebaseUser? = null
 
     private val TAG = "LoginActivity"
 
@@ -154,10 +157,13 @@ class LoginFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
+
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    updateUI(user)
+                    user = auth.currentUser
+
+                    comprobarUsuario()
+                    //updateUI(user)
 
                 } else {
                     // If sign in fails, display a message to the user.
@@ -165,6 +171,67 @@ class LoginFragment : Fragment() {
                     updateUI(null)
                 }
             }
+    }
+
+    private fun comprobarUsuario() {
+        // Add a new document with a generated ID
+        val db = Firebase.firestore
+
+        user?.uid?.let {
+            db.collection("users").document(it)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    if (result.data != null) {
+
+                        Log.d(TAG, "$result")
+
+                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        startActivity(intent)
+                    } else {
+
+                        crarUsuario()
+
+                    }
+
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents.", exception)
+
+
+                }.addOnCompleteListener {
+                }
+        }
+    }
+
+    private fun crarUsuario() {
+
+        val user1 = Usuario().apply {
+
+            nombre = "Nombre"
+            apellido1 = "Apellido1"
+            apellido2 = "Apellido2"
+            edad = 99
+            region = "Region"
+            pais = "Pais"
+            joyas = 50
+            nickname = user?.displayName
+        }
+
+        user?.uid?.let {
+            db.collection("users").document(it)
+                .set(user1)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully written!")
+
+                    updateUI(user!!)
+
+                }
+                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+        }
+
+
     }
 
     private fun updateUI(user: FirebaseUser?) {

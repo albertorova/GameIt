@@ -35,8 +35,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
             android:text="Nombre"
             android:textColor="@color/white" />
 
@@ -44,10 +44,12 @@
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:alpha="0.5"
             android:background="@color/bliu"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
+            android:textStyle="italic"
             />
 
 
@@ -64,10 +66,12 @@
             android:id="@+id/etApellido1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:alpha="0.5"
             android:background="@color/bliu"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:textColorHint="@color/white"
+            android:textStyle="italic" />
 
         <TextView
             android:layout_width="match_parent"
@@ -82,10 +86,12 @@
             android:id="@+id/etApellido2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:alpha="0.5"
             android:background="@color/bliu"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:textColorHint="@color/white"
+            android:textStyle="italic" />
 
         <TextView
             android:layout_width="match_parent"
@@ -100,10 +106,12 @@
             android:id="@+id/etEdad"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:alpha="0.5"
             android:background="@color/bliu"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:textColorHint="@color/white"
+            android:textStyle="italic" />
 
         <TextView
             android:layout_width="match_parent"
@@ -117,10 +125,12 @@
             android:id="@+id/etPais"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:alpha="0.5"
             android:background="@color/bliu"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:textColorHint="@color/white"
+            android:textStyle="italic" />
 
         <TextView
             android:layout_width="match_parent"
@@ -134,10 +144,12 @@
             android:id="@+id/etRegion"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:alpha="0.5"
             android:background="@color/bliu"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:textColorHint="@color/white"
+            android:textStyle="italic" />
 
         <Button
             android:id="@+id/btnModificar"

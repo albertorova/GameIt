@@ -17,22 +17,29 @@ import com.example.gameit.MainActivity
 import com.example.gameit.R
 import com.example.gameit.databinding.FragmentRegisterBinding
 import com.example.gameit.models.Usuario
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class RegisterFragment : Fragment() {
 
-    private var usuario: Usuario? = null
-
     private lateinit var auth: FirebaseAuth
 
-    private var TAG = "RegisterFragment"
+    private var user: FirebaseUser? = null
+
+    private var db = Firebase.firestore
+
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     private var _binding: FragmentRegisterBinding? = null
 
     private val b get() = _binding!!
 
-    var nick: String? = ""
+    private var TAG = "RegisterFragment"
+
+    var nick: String = ""
 
 
     override fun onCreateView(
@@ -59,6 +66,7 @@ class RegisterFragment : Fragment() {
     private fun volver() {
 
         b.btVolver.setOnClickListener {
+
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.login_container, LoginFragment())?.commit()
         }
@@ -72,6 +80,7 @@ class RegisterFragment : Fragment() {
             val password = b.registerPassword.text.toString()
             val passwordConfirm = b.registerConfirmPassword.text.toString()
 
+            nick = b.registerNick.text.toString()
 
             if (password == passwordConfirm && password.length > 5) {
                 registrarFirebase(email, password)
@@ -87,13 +96,10 @@ class RegisterFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
-                    val user = auth.currentUser
-
+                    user = auth.currentUser
                     if (user != null) {
 
-                        nickDialog(user)
-
-
+                        crearUsuario()
                     }
                 } else {
                     // If sign in fails, display a message to the user.
@@ -106,54 +112,37 @@ class RegisterFragment : Fragment() {
             }
     }
 
-    private fun nickDialog(user: FirebaseUser) {
-
-        val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(context)
-        builder.setTitle("Introduce tu NickName")
-
-        // Set up the input
-        val input = EditText(context)
-
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.hint = "Crea tu NickName"
-        input.inputType = InputType.TYPE_CLASS_TEXT
-        builder.setView(input)
-
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
-
-
-
-            if (input.text.isEmpty()) {
-
-                Toast.makeText(
-                    requireContext(), "Introduce un Nick!",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            } else {
-
-                nick = input.text.toString()
-
-                updateUI(user)
-            }
-
-        })
-
-        builder.setNegativeButton(
-            "Cancel",
-            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
-
-        builder.show()
-
-    }
-
-
     private fun updateUI(user: FirebaseUser) {
 
         val intent = Intent(requireContext(), MainActivity::class.java)
-        intent.putExtra("nick",nick)
         startActivity(intent)
 
+    }
+
+    private fun crearUsuario() {
+
+        val user1 = Usuario().apply {
+
+            nombre = "Nombre"
+            apellido1 = "Apellido1"
+            apellido2 = "Apellido2"
+            edad = 99
+            region = "Region"
+            pais = "Pais"
+            joyas = 50
+            nickname = nick
+        }
+
+        user?.uid?.let {
+            db.collection("users")
+                .add(user1)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully written!")
+
+                    updateUI(user!!)
+                }
+                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+        }
     }
 
 

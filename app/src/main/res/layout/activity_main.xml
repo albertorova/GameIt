@@ -7,12 +7,13 @@
     android:background="@color/blue"
     tools:context=".MainActivity">
 
+
     <FrameLayout
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_navigation_view"
-        android:layout_marginBottom="0dp"
+
         >
 
     </FrameLayout>
@@ -28,8 +29,8 @@
         app:itemIconTint="@color/yellow"
         app:itemTextColor="@color/yellow"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_bottom_tabs"
-        app:layout_insetEdge="bottom">
+        app:layout_insetEdge="bottom"
+        app:menu="@menu/menu_bottom_tabs">
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,10 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/yellow"
-            android:src="@drawable/add"
+            android:src="@drawable/swords"
             app:fabCustomSize="50dp"
-            app:tint="@android:color/black"
-            />
+            app:tint="@android:color/black" />
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

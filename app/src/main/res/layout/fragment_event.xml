@@ -14,84 +14,123 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:text="Creacion de partida"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="CREACIÓN DE PARTIDA"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/white" />
+
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
             android:text="Selecciona el juego"
             android:textColor="@color/white" />
+
+        <View
+            android:layout_width="150dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="250dp"
+            android:background="@color/white" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gameRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/bliu" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:text="Selecciona el nivel"
             android:textColor="@color/white" />
 
+        <View
+            android:layout_width="150dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="250dp"
+            android:background="@color/white" />
+
         <Spinner
             android:id="@+id/level_spinner"
-            android:layout_width="150dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/bliu"
-
-            />
+            android:popupBackground="@color/bliu" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:text="Cuanto quieres apostar"
+            android:text="Cuanto apuestas"
             android:textColor="@color/white" />
+
+        <View
+            android:layout_width="150dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="250dp"
+            android:background="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnRes"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:textColor="@color/white"
-                android:text="-"
+                android:backgroundTint="@color/bliu"
                 android:padding="10dp"
-                android:textSize="20sp"
-
-                android:backgroundTint="@color/bliu"/>
+                android:text="-"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/crearApuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:text="0"
-                android:textSize="25sp"
                 android:layout_marginLeft="10dp"
+                android:text="0"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
+                android:textSize="25sp"
 
                 />
 
@@ -99,37 +138,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:text="💎"
-                android:textSize="15sp"
                 android:layout_margin="10dp"
+                android:text="💎"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                />
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/btnSum"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:backgroundTint="@color/bliu"
                 android:text="+"
-                android:textSize="20sp"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/bliu"/>
-
+                android:textSize="20sp" />
 
 
         </LinearLayout>
-
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:text="Codigo de invitacion"
             android:textColor="@color/white" />
+
 
         <EditText
             android:id="@+id/crearCodigo"
@@ -138,11 +175,12 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:textColor="@color/white"
-            android:hint="####"
+            android:alpha="0.5"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:alpha="0.5"/>
+            android:background="@color/bliu"
+            android:textStyle="italic"/>
 
         <Button
             android:id="@+id/btnCrear"
@@ -155,8 +193,7 @@
             android:backgroundTint="@color/yellow"
             android:text="Crear partida"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
     </LinearLayout>
 

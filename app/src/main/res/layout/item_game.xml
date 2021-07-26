@@ -6,7 +6,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/eventCard"
-        android:layout_width="170dp"
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:clickable="true"
@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/bliu"
+            android:background="@color/blue"
             android:orientation="vertical">
 
 
@@ -31,7 +31,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:gravity="center"
                 android:orientation="vertical">
 

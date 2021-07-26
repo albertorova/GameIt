@@ -10,13 +10,60 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp">
+        android:layout_height="wrap_content"
+       android:layout_margin="20dp"
+        android:background="@color/blue"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selecciona la sala"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/games_spinner"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp"
+            android:backgroundTint="@color/bliu"
+            android:popupBackground="@color/bliu" />
+
+        <ImageView
+            android:clickable="true"
+            android:id="@+id/btnReload"
+            android:background="?attr/selectableItemBackground"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/update"/>
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@color/black">
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Parece que no hay mensajes todavía ..."
+            android:textColor="@color/white"
+            android:layout_margin="20dp"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            />
+
+    </RelativeLayout>
 
 
     <LinearLayout
@@ -27,9 +74,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
             android:text="Escribe un mensaje"
             android:textColor="@color/white"
-            android:layout_margin="20dp"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -37,23 +87,24 @@
             android:id="@+id/chatText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/bliu"
             android:textColor="@color/white"
-            android:textColorHint="@color/white"
             android:textColorHighlight="@color/white"
-            android:backgroundTint="@color/bliu"/>
+            android:textColorHint="@color/white"
+            android:padding="5dp"/>
 
         <Button
             android:id="@+id/btnSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="enviar"
             android:backgroundTint="@color/yellow"
-            android:layout_margin="20dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:text="enviar"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

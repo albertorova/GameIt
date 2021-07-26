@@ -37,7 +37,7 @@
                     android:layout_centerVertical="true"
                     android:text="VICTORY"
                     android:textColor="@color/green"
-                    android:textSize="35sp"
+                    android:textSize="40sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
@@ -48,7 +48,7 @@
                     android:layout_centerInParent="true"
                     android:text="DEFEAT"
                     android:textColor="@color/red"
-                    android:textSize="35sp"
+                    android:textSize="40sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
@@ -58,7 +58,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -67,7 +67,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre Juego"
-
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -97,7 +96,7 @@
                         android:id="@+id/historialApuesta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="25dp"
                         android:text="Apuesta"
                         android:textColor="@color/purple_200" />
                 </LinearLayout>

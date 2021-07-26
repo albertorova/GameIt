@@ -1,17 +1,25 @@
 package com.example.gameit.adapters
 
+import android.R.attr.label
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gameit.R
 import com.example.gameit.databinding.ItemActualesBinding
 import com.example.gameit.models.Partida
+import com.example.gameit.ui.FindFragment
 import com.squareup.picasso.Picasso
+
 
 class ActualesAdapter(
 
@@ -40,6 +48,17 @@ class ActualesAdapter(
                 Log.v(TAG, "CLick en la partida actual")
 
             }
+
+            holder.actualesCard.setOnLongClickListener(View.OnLongClickListener { // obtenemos el texto del textView3
+
+                Log.v(TAG, "CLick laaaaaargo")
+
+                /*val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip: ClipData = ClipData.newPlainText("simple text", data.apuesta.toString())
+                clipboard.setPrimaryClip(clip)*/
+
+                false
+            })
         }
     }
 
@@ -59,7 +78,7 @@ class ActualesAdapter(
         val actualesCard = v.findViewById(R.id.card) as CardView
 
         fun bindItems(data: Partida) {
-            Picasso.get().load("https://images-na.ssl-images-amazon.com/images/I/51rkz8wallL.jpg")
+            Picasso.get().load(data.portada)
                 .into(b.actualesImage)
             b.actualesName.text = data.nombre
             b.actualesCreator.text = data.creador

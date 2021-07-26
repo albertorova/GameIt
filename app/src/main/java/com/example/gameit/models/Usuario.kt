@@ -11,5 +11,5 @@ class Usuario(): Serializable {
     var region: String? = null
     var pais: String? = null
     var joyas: Int? = null
-    var nick: String? = null
+    var nickname: String? = null
 }

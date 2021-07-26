@@ -52,7 +52,7 @@ class HistorialAdapter(
 
         fun bindItems(data: Partida) {
 
-            Picasso.get().load("https://images-na.ssl-images-amazon.com/images/I/51rkz8wallL.jpg")
+            Picasso.get().load(data.portada)
                 .into(b.historialImage)
             b.historialName.text = data.nombre
             b.historialCreator.text = data.creador
@@ -76,11 +76,15 @@ class HistorialAdapter(
             }
 
             if (data.isVictory == true) {
+
+                val a = data.apuesta?.times(2)
+
                 b.victory.isVisible = true
                 b.historialApuesta.setTextColor(ContextCompat.getColor(context!!, R.color.green))
-                b.historialApuesta.text = "+ ${data.apuesta} \uD83D\uDC8E"
+                b.historialApuesta.text = "+ $a \uD83D\uDC8E"
 
             } else {
+
                 b.defeat.isVisible = true
                 b.historialApuesta.setTextColor(ContextCompat.getColor(context!!, R.color.red))
                 b.historialApuesta.text = "- ${data.apuesta} \uD83D\uDC8E"

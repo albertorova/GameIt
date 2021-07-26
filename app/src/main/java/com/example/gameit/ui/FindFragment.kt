@@ -1,15 +1,22 @@
 package com.example.gameit.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.View.OnLongClickListener
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.R
 import com.example.gameit.adapters.FindAdapter
 import com.example.gameit.databinding.FragmentFindBinding
 import com.example.gameit.models.Partida
+import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -22,6 +29,12 @@ import com.google.firebase.ktx.Firebase
 
 
 class FindFragment : Fragment() {
+
+    private var usuario: Usuario? = null
+
+    private var joyasDelUsuario: Int? = null
+
+    private var balanceJoyas: Int? = null
 
     val listaPartidas = arrayListOf<Partida>()
 
@@ -99,7 +112,19 @@ class FindFragment : Fragment() {
 
                 Log.d(TAG, "$listaPartidas")
 
-                initAdapter()
+                if (listaPartidas.isEmpty()) {
+
+                    b.image1.isVisible = true
+
+                    initAdapter()
+
+                } else {
+
+                    b.image1.isVisible = false
+
+                    initAdapter()
+
+                }
 
             }
 
@@ -130,24 +155,97 @@ class FindFragment : Fragment() {
     private fun initDialog(partida: Partida) {
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Desafio")
-            .setMessage("Aceptas el desafio??")
+
+            .setTitle("¿Aceptas el desafío?")
 
             .setNegativeButton("Cancelar") { dialog, which ->
+
                 dialog.dismiss()
+
             }
-            .setPositiveButton("Aceptar") { dialog, which ->
-                aceptarPartida(partida)
+            .setPositiveButton("Dale") { dialog, which ->
+
+                comprobarSaldo(partida, dialog)
+
             }
+
             .show()
+            .window?.setBackgroundDrawableResource(R.color.orangy)
+
+    }
+
+    private fun comprobarSaldo(partida: Partida, dialog: DialogInterface) {
+        // Add a new document with a generated ID
+
+        val joyasRestadas = partida.apuesta
+
+        user = Firebase.auth.currentUser
+
+        user?.uid?.let {
+            db.collection("users").document(it)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    Log.d(TAG, "$result")
+
+                    usuario = result.toObject(Usuario::class.java)
+
+                    joyasDelUsuario = usuario?.joyas
+
+                    balanceJoyas = joyasDelUsuario!! - joyasRestadas!!
+
+                    Log.v(TAG, "$usuario")
+
+                    if (balanceJoyas!! < 0) {
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Joyas insuficientes!",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+
+                        dialog.dismiss()
+
+                    } else {
+
+                        aceptarPartida(partida)
+                    }
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents.", exception)
+
+                }.addOnCompleteListener {
+                    Log.w(TAG, "Tarea completada")
+                }
+        }
     }
 
     private fun aceptarPartida(partida: Partida) {
 
         partida.id?.let {
             db.collection("partidas").document(it)
-            .update("accepted", true)
-                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!")
+                .update("accepted", true)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully updated!")
+
+                    restarApuesta()
+
+                }
+                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+        }
+    }
+
+    private fun restarApuesta() {
+
+        user = Firebase.auth.currentUser
+
+        user?.uid?.let {
+            db.collection("users").document(it)
+                .update("joyas", balanceJoyas)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully updated!")
 
                     Toast.makeText(
                         requireContext(),
@@ -156,12 +254,14 @@ class FindFragment : Fragment() {
                     )
                         .show()
 
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.main_container, FindFragment())?.commit()
+                    listaPartidas.clear()
+
+                    leerPartidas()
 
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
         }
+
     }
 
 

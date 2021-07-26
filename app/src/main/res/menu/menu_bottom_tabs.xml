@@ -11,8 +11,7 @@
         android:icon="@drawable/chat"
         android:title="Chat" />
 
-    <item
-        android:title="" />
+    <item android:title="" />
 
 
     <item

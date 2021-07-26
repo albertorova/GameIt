@@ -10,7 +10,19 @@
         <item>NOOB</item>
         <item>AVERAGE</item>
         <item>PRO</item>
+    </string-array>
 
+    <string-array name="games_array">
+        <item>Fortnite</item>
+        <item>Brawl Stars</item>
+        <item>Mario Kart</item>
+        <item>Garena FF</item>
+        <item>Clash of Clans</item>
+        <item>Clash Royale</item>
+        <item>Hearthstone</item>
+        <item>FIFA Mobile</item>
+        <item>Call of Duty</item>
+        <item>PUBG MOBILE</item>
     </string-array>
 
 </resources>

@@ -1,12 +1,16 @@
 package com.example.gameit.adapters
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.location.LocationManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gameit.R
 import com.example.gameit.databinding.ItemFindBinding
@@ -36,6 +40,17 @@ class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Pa
                 Log.v(TAG, "CLick en la partida del find")
 
             }
+
+            holder.findCard.setOnLongClickListener(View.OnLongClickListener { // obtenemos el texto del textView3
+
+                Log.v(TAG, "CLick laaaaaargo")
+
+                /*val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip: ClipData = ClipData.newPlainText("simple text", data.apuesta.toString())
+                clipboard.setPrimaryClip(clip)*/
+
+                false
+            })
         }
     }
 
@@ -56,11 +71,14 @@ class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Pa
 
 
         fun bindItems(data: Partida) {
-            Picasso.get().load("https://images-na.ssl-images-amazon.com/images/I/51rkz8wallL.jpg")
+            Picasso.get().load(data.portada)
                 .into(b.findImage)
+
             b.findName.text = data.nombre
             b.findCreator.text = data.creador
             b.findLevel.text = data.nivel
+
+
 
             when (data.nivel) {
                 "PRO" -> {
@@ -80,3 +98,4 @@ class FindAdapter(private val mDataSet: ArrayList<Partida>, var clickAction: (Pa
         }
     }
 }
+
