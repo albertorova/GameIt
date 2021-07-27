@@ -51,7 +51,7 @@ class ActualesAdapter(
 
             }
 
-            holder.b.actualesCard.setOnLongClickListener(View.OnLongClickListener { // obtenemos el texto del textView3
+            holder.b.actualesCard.setOnLongClickListener {
 
                 Log.v(TAG, "CLick laaaaaargo")
 
@@ -68,7 +68,7 @@ class ActualesAdapter(
                 clipboard.setPrimaryClip(clip)
 
                 false
-            })
+            }
         }
     }
 
@@ -104,7 +104,7 @@ class ActualesAdapter(
                 }
             }
 
-            b.actualesApuesta.text = "${data.apuesta} \uD83D\uDC8E"
+            b.actualesApuesta.text = "${data.apuesta} \uD83E\uDE99"
             b.actualesCodigo.text = data.codigo
         }
     }

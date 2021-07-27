@@ -2,10 +2,8 @@ package com.example.gameit.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import com.example.gameit.LoginActivity
 import com.example.gameit.R
@@ -43,11 +41,41 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         initGoogle()
 
         initViews()
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.settings -> {
+
+                //Ir a settings
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_container, SettingsFragment())?.commit()
+
+                true
+            }
+
+            R.id.comprar -> {
+
+                //Ir a settings
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_container, ComprarFragment())?.commit()
+
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initGoogle() {

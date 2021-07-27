@@ -81,13 +81,13 @@ class HistorialAdapter(
 
                 b.victory.isVisible = true
                 b.historialApuesta.setTextColor(ContextCompat.getColor(context!!, R.color.green))
-                b.historialApuesta.text = "+ $a \uD83D\uDC8E"
+                b.historialApuesta.text = "+ $a \uD83E\uDE99"
 
             } else {
 
                 b.defeat.isVisible = true
                 b.historialApuesta.setTextColor(ContextCompat.getColor(context!!, R.color.red))
-                b.historialApuesta.text = "- ${data.apuesta} \uD83D\uDC8E"
+                b.historialApuesta.text = "- ${data.apuesta} \uD83E\uDE99"
             }
 
         }

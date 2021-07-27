@@ -3,16 +3,13 @@ package com.example.gameit.adapters
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.location.LocationManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gameit.R
@@ -48,7 +45,7 @@ class FindAdapter(
 
             }
 
-            holder.findCard.setOnLongClickListener(View.OnLongClickListener { // obtenemos el texto del textView3
+            holder.findCard.setOnLongClickListener {
 
                 Log.v(TAG, "CLick laaaaaargo")
 
@@ -65,7 +62,7 @@ class FindAdapter(
                 clipboard.setPrimaryClip(clip)
 
                 false
-            })
+            }
         }
     }
 
@@ -107,7 +104,7 @@ class FindAdapter(
                 }
             }
 
-            b.findApuesta.text = "${data.apuesta} \uD83D\uDC8E"
+            b.findApuesta.text = "${data.apuesta} \uD83E\uDE99"
             b.findCodigo.text = data.codigo
 
         }

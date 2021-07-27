@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setBackgroundDrawable(ColorDrawable(0xFF000000.toInt()))
 
-        title = "GameIt                         \uD83E\uDE99     \uD83D\uDC8E"
+        title = "GameIt               \uD83E\uDE99     \uD83D\uDC8E"
 
         initGoogle()
 
@@ -108,8 +108,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAppBar() {
 
-        val a = usuario?.joyas.toString()
-        title = "GameIt                     100 \uD83E\uDE99  $a \uD83D\uDC8E"
+        val a = usuario?.monedas.toString()
+        title = "GameIt           $a \uD83E\uDE99  50 \uD83D\uDC8E"
 
     }
 
@@ -126,9 +126,9 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.main_container, fragment).commit()
     }
 
-    fun actualizarBalanceJoyas(balanceJoyas: Int?) {
+    fun actualizarBalanceMonedas(balanceMonedas: Int?) {
 
-        title = "GameIt                     100 \uD83E\uDE99  $balanceJoyas \uD83D\uDC8E"
+        title = "GameIt           $balanceMonedas \uD83E\uDE99  50 \uD83D\uDC8E"
 
     }
 

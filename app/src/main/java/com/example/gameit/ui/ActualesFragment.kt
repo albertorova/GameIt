@@ -29,9 +29,9 @@ class ActualesFragment : Fragment() {
 
     private var usuario: Usuario? = null
 
-    private var joyasDelUsuario: Int? = null
+    private var monedasDelUsuario: Int? = null
 
-    private var balanceJoyas: Int? = null
+    private var balanceMonedas: Int? = null
 
     val listaPartidasAceptadas = arrayListOf<Partida>()
 
@@ -129,6 +129,7 @@ class ActualesFragment : Fragment() {
     }
 
     private fun initDialog(partida: Partida) {
+
         MaterialAlertDialogBuilder(requireContext())
 
             .setTitle("Resultado")
@@ -151,7 +152,7 @@ class ActualesFragment : Fragment() {
 
     private fun comprobarSaldo(partida: Partida) {
 
-        val joyasSumadas = partida.apuesta
+        val monedasSumadas = partida.apuesta
 
         user = Firebase.auth.currentUser
 
@@ -164,11 +165,11 @@ class ActualesFragment : Fragment() {
 
                     usuario = result.toObject(Usuario::class.java)
 
-                    joyasDelUsuario = usuario?.joyas
+                    monedasDelUsuario = usuario?.monedas
 
-                    val j = joyasSumadas?.times(2)
+                    val j = monedasSumadas?.times(2)
 
-                    balanceJoyas = joyasDelUsuario!! + j!!
+                    balanceMonedas = monedasDelUsuario!! + j!!
 
                     Log.v(TAG, "$usuario")
 
@@ -204,18 +205,18 @@ class ActualesFragment : Fragment() {
 
         user?.uid?.let {
             db.collection("users").document(it)
-                .update("joyas", balanceJoyas)
+                .update("monedas", balanceMonedas)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully updated!")
 
                     Toast.makeText(
                         requireContext(),
-                        "Desafio aceptado!",
+                        "Has ganado",
                         Toast.LENGTH_SHORT
                     )
                         .show()
 
-                    (activity as? MainActivity)?.actualizarBalanceJoyas(balanceJoyas)
+                    (activity as? MainActivity)?.actualizarBalanceMonedas(balanceMonedas)
 
                     listaPartidasAceptadas.clear()
 

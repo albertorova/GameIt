@@ -10,6 +10,7 @@ class Usuario(): Serializable {
     var edad: Int? = null
     var region: String? = null
     var pais: String? = null
+    var monedas: Int? = null
     var joyas: Int? = null
     var nickname: String? = null
 }

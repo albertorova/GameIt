@@ -27,11 +27,11 @@ class EventFragment : Fragment() {
 
     private var usuario: Usuario? = null
 
-    var tempPortada: String = ""
+    var tempPortada: String = "https://cdn2.unrealengine.com/metaimage1-1920x1080-abb60090deaf.png"
 
-    var tempNombre: String = ""
+    var tempNombre: String = "Fornite"
 
-    var tempNivel: String = ""
+    var tempNivel: String = "NOOB"
 
     val listaJuegos = arrayListOf<Game>()
 
@@ -51,7 +51,7 @@ class EventFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
 
         _binding = FragmentEventBinding.inflate(inflater, container, false)
@@ -77,7 +77,11 @@ class EventFragment : Fragment() {
 
         incrementarApuesta()
 
-        crearPartida()
+        b.btnCrear.setOnClickListener {
+
+                crearPartida()
+
+            }
 
     }
 
@@ -141,6 +145,15 @@ class EventFragment : Fragment() {
                 true
             }
 
+            R.id.comprar -> {
+
+                //Ir a settings
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_container, ComprarFragment())?.commit()
+
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -149,6 +162,7 @@ class EventFragment : Fragment() {
 
 
         b.btnSum.setOnClickListener {
+
             val a = b.crearApuesta.text.toString().toInt()
             val c = a + 1
             b.crearApuesta.text = c.toString()
@@ -157,10 +171,13 @@ class EventFragment : Fragment() {
 
         b.btnRes.setOnClickListener {
             val a = b.crearApuesta.text.toString().toInt()
-            if (a == 0) {
-                Log.v(TAG, "no se puede bajar de 0")
+
+            if (a == 1) {
+
+                Log.v(TAG, "no se puede bajar de 1")
 
             } else {
+
                 val c = a - 1
                 b.crearApuesta.text = c.toString()
             }
@@ -248,20 +265,14 @@ class EventFragment : Fragment() {
 
     private fun crearPartida() {
 
-        b.btnCrear.setOnClickListener {
-
-
             val unaPartida = Partida()
 
             unaPartida.portada = tempPortada
             unaPartida.creador = usuario?.nickname
             unaPartida.nombre = tempNombre
             unaPartida.nivel = tempNivel
-
             unaPartida.apuesta = b.crearApuesta.text.toString().toInt()
-
             unaPartida.codigo = b.crearCodigo.text.toString()
-
             unaPartida.isAccepted
             unaPartida.isFinished
             unaPartida.isVictory
@@ -283,7 +294,7 @@ class EventFragment : Fragment() {
 
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-        }
+
 
     }
 

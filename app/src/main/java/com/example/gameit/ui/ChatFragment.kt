@@ -196,6 +196,15 @@ class ChatFragment : Fragment() {
                 true
             }
 
+            R.id.comprar -> {
+
+                //Ir a settings
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_container, ComprarFragment())?.commit()
+
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

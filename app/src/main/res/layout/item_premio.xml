@@ -5,9 +5,10 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/eventCard"
-        android:layout_width="156dp"
+        android:id="@+id/comprarCard"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
         android:layout_margin="10dp"
         android:clickable="true"
         app:cardElevation="10dp">
@@ -15,17 +16,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue"
+            android:background="@color/bliu"
             android:orientation="vertical">
 
 
             <ImageView
-                android:id="@+id/gamePortada"
+                android:id="@+id/premioImagen"
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
                 android:scaleType="centerCrop"
-                android:src="@android:drawable/btn_star_big_on"
-                />
+                android:background="@color/white"
+                android:src="@android:drawable/btn_star_big_on" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,12 +36,21 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/gameNombre"
+                    android:id="@+id/premioNombre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nombre Juego"
+                    android:text="Premio"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/premioPrecio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10 🪙"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textColor="@color/yellow"
                     android:textStyle="bold" />
 
             </LinearLayout>

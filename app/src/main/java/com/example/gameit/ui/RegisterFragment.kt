@@ -129,6 +129,7 @@ class RegisterFragment : Fragment() {
             edad = 99
             region = "Region"
             pais = "Pais"
+            monedas = 100
             joyas = 50
             nickname = nick
         }

@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 
 class SplashActivity : AppCompatActivity() {
 
-    var t: Long = 10000
+    var t: Long = 1000
 
     private lateinit var b: ActivitySplashBinding
 
@@ -267,7 +267,6 @@ class SplashActivity : AppCompatActivity() {
             b.tv2.text = ""
 
         }, 10000)
-
 
     }
 

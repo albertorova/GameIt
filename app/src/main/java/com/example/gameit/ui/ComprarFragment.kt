@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gameit.MainActivity
 import com.example.gameit.R
+import com.example.gameit.adapters.ComprarAdapter
 import com.example.gameit.adapters.FindAdapter
-import com.example.gameit.databinding.FragmentFindBinding
-import com.example.gameit.models.Partida
+import com.example.gameit.databinding.FragmentComprarBinding
+import com.example.gameit.models.Premio
 import com.example.gameit.models.Usuario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,7 +25,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 
-class FindFragment : Fragment() {
+class ComprarFragment : Fragment() {
 
     private var usuario: Usuario? = null
 
@@ -33,7 +33,7 @@ class FindFragment : Fragment() {
 
     private var balanceMonedas: Int? = null
 
-    val listaPartidas = arrayListOf<Partida>()
+    val listaPremios = arrayListOf<Premio>()
 
     private var user: FirebaseUser? = null
 
@@ -41,9 +41,9 @@ class FindFragment : Fragment() {
 
     private var db = Firebase.firestore
 
-    private var TAG = "FindFragment"
+    private var TAG = "ComprarFragment"
 
-    private var _binding: FragmentFindBinding? = null
+    private var _binding: FragmentComprarBinding? = null
 
     private val b get() = _binding!!
 
@@ -52,7 +52,7 @@ class FindFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentFindBinding.inflate(inflater, container, false)
+        _binding = FragmentComprarBinding.inflate(inflater, container, false)
 
         return b.root
     }
@@ -65,7 +65,7 @@ class FindFragment : Fragment() {
 
         initViews()
 
-        leerPartidas()
+        leerPremios()
 
     }
 
@@ -98,39 +98,26 @@ class FindFragment : Fragment() {
         }
     }
 
-    private fun leerPartidas() {
+    private fun leerPremios() {
 
-        db.collection("partidas")
-            .whereEqualTo("accepted", false)
+        db.collection("premios")
+            .orderBy("precio")
             .get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
                     Log.d(TAG, "${document.id} => ${document.data}")
 
-                    val a = document.toObject<Partida>()
+                    val a = document.toObject<Premio>()
 
                     a.id = document.id
 
-                    listaPartidas.add(a)
+                    listaPremios.add(a)
 
                 }
 
-                Log.d(TAG, "$listaPartidas")
+                initAdapter()
 
-                if (listaPartidas.isEmpty()) {
-
-                    b.image1.isVisible = true
-
-                    initAdapter()
-
-                } else {
-
-                    b.image1.isVisible = false
-
-                    initAdapter()
-
-                }
 
             }
 
@@ -144,25 +131,25 @@ class FindFragment : Fragment() {
 
     private fun initAdapter() {
 
-        val mAdapter = FindAdapter(listaPartidas, activity) {
+        val mAdapter = ComprarAdapter(listaPremios, activity) {
 
-            Log.w(TAG, "Click en partida del find")
+            Log.w(TAG, "Click en el premio")
 
             initDialog(it)
 
         }
 
-        b.findRecyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        b.findRecyclerView.adapter = mAdapter
+        b.comprarRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        b.comprarRecyclerView.adapter = mAdapter
 
     }
 
-    private fun initDialog(partida: Partida) {
+    private fun initDialog(premio: Premio) {
 
         MaterialAlertDialogBuilder(requireContext())
 
-            .setTitle("¿Aceptas el desafío?")
+            .setTitle("Canjear las monedas?")
 
             .setNegativeButton("Cancelar") { dialog, which ->
 
@@ -171,7 +158,7 @@ class FindFragment : Fragment() {
             }
             .setPositiveButton("Dale") { dialog, which ->
 
-                comprobarSaldo(partida, dialog)
+                comprobarSaldo(premio, dialog)
 
             }
 
@@ -180,10 +167,10 @@ class FindFragment : Fragment() {
 
     }
 
-    private fun comprobarSaldo(partida: Partida, dialog: DialogInterface) {
+    private fun comprobarSaldo(premio: Premio, dialog: DialogInterface) {
         // Add a new document with a generated ID
 
-        val monedasRestadas = partida.apuesta
+        val monedasRestadas = premio.precio
 
         user = Firebase.auth.currentUser
 
@@ -215,7 +202,7 @@ class FindFragment : Fragment() {
 
                     } else {
 
-                        aceptarPartida(partida)
+                        aceptarPremio(premio)
                     }
 
                 }
@@ -228,10 +215,10 @@ class FindFragment : Fragment() {
         }
     }
 
-    private fun aceptarPartida(partida: Partida) {
+    private fun aceptarPremio(premio: Premio) {
 
-        partida.id?.let {
-            db.collection("partidas").document(it)
+        premio.id?.let {
+            db.collection("premios").document(it)
                 .update("accepted", true)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully updated!")
@@ -255,16 +242,12 @@ class FindFragment : Fragment() {
 
                     Toast.makeText(
                         requireContext(),
-                        "Desafio aceptado!",
+                        "Premio canjeado",
                         Toast.LENGTH_SHORT
                     )
                         .show()
 
                     (activity as? MainActivity)?.actualizarBalanceMonedas(balanceMonedas)
-
-                    listaPartidas.clear()
-
-                    leerPartidas()
 
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
@@ -294,5 +277,4 @@ class FindFragment : Fragment() {
         _binding = null
     }
 }
-
 
