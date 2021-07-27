@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context=".ui.ProfileFragment">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,14 +17,37 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="PERFIL"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/white" />
 
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:background="#4667A6"
             android:gravity="center"
-            android:layout_margin="20dp">
+            android:orientation="horizontal">
+
 
             <ImageView
                 android:id="@+id/user_profile_photo"
@@ -31,24 +55,27 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:src="@drawable/ic_launcher_foreground" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="✎"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="8dp"
+                android:text="✎"
                 android:textColor="@color/white"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/etNick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nick"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                />
+                android:textColorHint="@color/white" />
 
         </LinearLayout>
 
@@ -56,14 +83,14 @@
             android:id="@+id/iv2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_background"
-            android:layout_margin="5dp"/>
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_launcher_background" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -83,7 +110,6 @@
         </LinearLayout>
 
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,8 +127,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:textStyle="italic"
-            />
+            android:textStyle="italic" />
 
 
         <TextView
