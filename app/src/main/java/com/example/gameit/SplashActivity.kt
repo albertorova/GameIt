@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 
 class SplashActivity : AppCompatActivity() {
 
-    var t: Long = 1000
+    var t: Long = 10000
 
     private lateinit var b: ActivitySplashBinding
 

@@ -1,17 +1,13 @@
 package com.example.gameit.ui
 
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import com.example.gameit.MainActivity
 import com.example.gameit.R
@@ -39,7 +35,7 @@ class RegisterFragment : Fragment() {
 
     private var TAG = "RegisterFragment"
 
-    var nick: String = ""
+    private var nick: String = "NickName"
 
 
     override fun onCreateView(
@@ -79,7 +75,6 @@ class RegisterFragment : Fragment() {
             val email = b.registerEmail.text.toString()
             val password = b.registerPassword.text.toString()
             val passwordConfirm = b.registerConfirmPassword.text.toString()
-
             nick = b.registerNick.text.toString()
 
             if (password == passwordConfirm && password.length > 5) {
@@ -132,6 +127,7 @@ class RegisterFragment : Fragment() {
             monedas = 100
             joyas = 50
             nickname = nick
+            victorias = 0
         }
 
         user?.uid?.let {

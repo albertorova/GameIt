@@ -218,6 +218,7 @@ class LoginFragment : Fragment() {
             monedas = 100
             joyas = 50
             nickname = user?.displayName
+            victorias = 0
         }
 
         user?.uid?.let {

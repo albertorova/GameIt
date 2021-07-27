@@ -19,6 +19,8 @@ import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
 
+    private var vics: Int? = null
+
     private var usuario: Usuario? = null
 
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -81,6 +83,9 @@ class ProfileFragment : Fragment() {
         b.etRegion.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) b.etRegion.setText("")
         }
+        b.etNick.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) b.etNick.setText("")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -140,24 +145,38 @@ class ProfileFragment : Fragment() {
         b.etEdad.alpha = 1F
         b.etPais.alpha = 1F
         b.etRegion.alpha = 1F
+        b.etNick.alpha = 1F
 
+        val nombre = b.etNombre.text.toString()
+        val apellido1 = b.etApellido1.text.toString()
+        val apellido2 = b.etApellido2.text.toString()
+        val edad = b.etEdad.text.toString().toInt()
+        val region = b.etRegion.text.toString()
+        val pais = b.etPais.text.toString()
+        val nick = b.etNick.text.toString()
 
-        val user1 = Usuario().apply {
-
-            nombre = b.etNombre.text.toString()
-            apellido1 = b.etApellido1.text.toString()
-            apellido2 = b.etApellido2.text.toString()
-            edad = b.etEdad.text.toString().toInt()
-            region = b.etRegion.text.toString()
-            pais = b.etPais.text.toString()
-        }
 
         val db = Firebase.firestore
         val userFirebase = Firebase.auth.currentUser
 
         userFirebase?.uid?.let {
             db.collection("users").document(it)
-                .set(user1)
+                .update(
+                    "nombre",
+                    nombre,
+                    "apellido1",
+                    apellido1,
+                    "apellido2",
+                    apellido2,
+                    "edad",
+                    edad,
+                    "region",
+                    region,
+                    "pais",
+                    pais,
+                    "nickname",
+                    nick
+                )
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
 
@@ -190,6 +209,8 @@ class ProfileFragment : Fragment() {
 
                     Log.v(TAG, "$usuario")
 
+                    vics = usuario?.victorias
+
                     initDatosUsuario()
                 }
                 .addOnFailureListener { exception ->
@@ -211,7 +232,43 @@ class ProfileFragment : Fragment() {
         b.etEdad.setText(usuario?.edad.toString())
         b.etRegion.setText(usuario?.region)
         b.etPais.setText(usuario?.pais)
-        b.userProfileName.text = userFirebase?.displayName
+        b.etNick.setText(usuario?.nickname)
+        b.tvVictorias.text = usuario?.victorias.toString()
+
+        if (vics!! in 0..1) {
+
+            Picasso.get().load("https://opgg-static.akamaized.net/images/medals/iron_1.png")
+                .into(b.iv2)
+
+        } else if (vics!! in 2..3) {
+
+            Picasso.get().load("https://opgg-static.akamaized.net/images/medals/silver_1.png")
+                .into(b.iv2)
+
+        } else if (vics!! in 4..5) {
+
+            Picasso.get().load("https://opgg-static.akamaized.net/images/medals/gold_1.png")
+                .into(b.iv2)
+
+        } else if (vics!! in 6..7) {
+
+            Picasso.get().load("https://opgg-static.akamaized.net/images/medals/platinum_1.png")
+                .into(b.iv2)
+
+        } else if (vics!! in 8..9) {
+
+            Picasso.get().load("https://opgg-static.akamaized.net/images/medals/diamond_1.png")
+                .into(b.iv2)
+
+        } else if (vics!! in 10..11) {
+
+            Picasso.get().load("https://opgg-static.akamaized.net/images/medals/master_1.png")
+                .into(b.iv2)
+
+        } else if (vics!! >= 12) {
+            Picasso.get().load("https://opgg-static.akamaized.net/images/medals/challenger_1.png")
+                .into(b.iv2)
+        }
 
     }
 }

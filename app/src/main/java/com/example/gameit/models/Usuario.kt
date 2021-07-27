@@ -13,4 +13,5 @@ class Usuario(): Serializable {
     var monedas: Int? = null
     var joyas: Int? = null
     var nickname: String? = null
+    var victorias: Int? = null
 }

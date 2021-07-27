@@ -31,7 +31,11 @@ class ActualesFragment : Fragment() {
 
     private var monedasDelUsuario: Int? = null
 
+    private var victoriasDelUsuario: Int? = null
+
     private var balanceMonedas: Int? = null
+
+    private var balanceVictorias: Int? = null
 
     val listaPartidasAceptadas = arrayListOf<Partida>()
 
@@ -167,9 +171,13 @@ class ActualesFragment : Fragment() {
 
                     monedasDelUsuario = usuario?.monedas
 
+                    victoriasDelUsuario = usuario?.victorias
+
                     val j = monedasSumadas?.times(2)
 
-                    balanceMonedas = monedasDelUsuario!! + j!!
+                    balanceMonedas = j?.let { it1 -> monedasDelUsuario?.plus(it1) }
+
+                    balanceVictorias = victoriasDelUsuario?.plus(1)
 
                     Log.v(TAG, "$usuario")
 
@@ -205,7 +213,7 @@ class ActualesFragment : Fragment() {
 
         user?.uid?.let {
             db.collection("users").document(it)
-                .update("monedas", balanceMonedas)
+                .update("monedas", balanceMonedas,"victorias",balanceVictorias)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully updated!")
 
