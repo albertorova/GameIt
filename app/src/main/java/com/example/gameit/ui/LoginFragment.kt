@@ -55,10 +55,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Picasso.get()
-            .load("https://yt3.ggpht.com/ytc/AKedOLRyqsQbpKNjJBgwlvqyaAL9mLZUqPanLVsXUaXOUw=s900-c-k-c0x00ffffff-no-rj")
-            .into(b.loginImage)
-
         initGoogle()
 
         initViews()
