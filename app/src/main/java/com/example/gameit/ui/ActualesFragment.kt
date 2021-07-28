@@ -136,7 +136,7 @@ class ActualesFragment : Fragment() {
 
         MaterialAlertDialogBuilder(requireContext())
 
-            .setTitle("Resultado")
+            .setTitle("Resultado de la partida")
 
             .setNegativeButton("Derrota") { dialog, which ->
 

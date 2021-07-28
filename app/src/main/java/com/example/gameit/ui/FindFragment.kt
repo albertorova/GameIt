@@ -169,7 +169,7 @@ class FindFragment : Fragment() {
                 dialog.dismiss()
 
             }
-            .setPositiveButton("Dale") { dialog, which ->
+            .setPositiveButton("A por ello") { dialog, which ->
 
                 comprobarSaldo(partida, dialog)
 

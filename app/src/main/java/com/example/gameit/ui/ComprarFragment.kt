@@ -149,14 +149,14 @@ class ComprarFragment : Fragment() {
 
         MaterialAlertDialogBuilder(requireContext())
 
-            .setTitle("Canjear las monedas?")
+            .setTitle("¿Canjear monedas?")
 
             .setNegativeButton("Cancelar") { dialog, which ->
 
                 dialog.dismiss()
 
             }
-            .setPositiveButton("Dale") { dialog, which ->
+            .setPositiveButton("Comprar") { dialog, which ->
 
                 comprobarSaldo(premio, dialog)
 
